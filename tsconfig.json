@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+      "target": "es2020",        
+      "module": "ESNext",        
+      "moduleResolution": "node",
+      "outDir": "./dist",        // Папка для скомпилированных файлов
+      "rootDir": "./src",        // Корневая директория исходных файлов
+      "strict": true,       
+      "noEmit": false,     
+      "esModuleInterop": true,   // Разрешает использование модулей ES6
+      "resolveJsonModule": true, // Позволяет импортировать модули JSON
+      "experimentalDecorators": true, 
+      "skipLibCheck": true,      // Пропускает проверку типов в объявлениях библиотек
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src/**/*"],     
+    "exclude": ["node_modules"]  // Исключает папку node_modules из компиляции
+  }
+  
+  
