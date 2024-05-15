@@ -1,8 +1,12 @@
 import { $api } from "./index.js";
 
-const getQuestionTemplate = (message: string) => {
+
+
+
+
+const getQuestionTemplate = (message: string, model: string) => {
   return {
-    model: "gpt-4-0125-preview",
+    model: model,
     messages: [
       {
         role: "user",
@@ -13,8 +17,8 @@ const getQuestionTemplate = (message: string) => {
   };
 };
 
-export const getAnswer = async (question: string): Promise<string> => {
-  const template = getQuestionTemplate(question);
+export const getAnswer = async (question: string, model:string): Promise<string> => {
+  const template = getQuestionTemplate(question, model);
   try {
     const response = await $api.post("", template);
 

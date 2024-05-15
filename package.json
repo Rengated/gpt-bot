@@ -12,6 +12,14 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.11",
-    "@types/node-telegram-bot-api": "^0.64.6"
-  }
+    "@types/node-telegram-bot-api": "^0.64.6",
+    "prisma": "^5.14.0"
+  },
+  "name": "gpt-bot",
+  "description": "",
+  "version": "1.0.0",
+  "main": "models.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

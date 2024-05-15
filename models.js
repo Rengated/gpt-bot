@@ -1,26 +1,28 @@
 import axios from "axios";
-import "dotenv";
-import { it } from "node:test";
+import "dotenv/config";
 
+let modelsId = [];
 let config = {
   method: "get",
   maxBodyLength: Infinity,
   url: "https://api.theb.ai/v1/models",
   // url: 'https://api.baizhi.ai/v1/models',
   headers: {
-    Authorization: `Bearer sk-C5fmce7FJIlYNxYx9eRyVGhlQi5BSQxTmbKQiYW9DhbkxGdG`,
+    Authorization: `Bearer ${process.env.KEY}`,
   },
 };
 
 axios
   .request(config)
   .then((response) => {
-    console.log(
-      JSON.stringify(
-        response.data.data.filter((item) => item.id.includes("gpt"))
-      )
-    );
+        modelsId = response.data.data.map(model => model.id);
   })
   .catch((error) => {
     console.log(error);
   });
+
+setTimeout(() => {
+    console.log('modelsId:', modelsId); // Пример использования глобальной переменной
+  }, 5000);
+
+export {modelsId}
