@@ -24,38 +24,29 @@ Bot.on("text", async (message) => {
       await Bot.sendMessage(message.chat.id, `Вы запустили бота!`);
       return;
     }
-    else if(message.text!.startsWith('/authorization')) {
+    if(message.text!.startsWith('/authorization')) {
       await Bot.sendMessage(message.chat.id, `Авторизация пока не готова)`);
       return;
     }
-    else if(message.text!.startsWith('/mode')) {
+    if(message.text!.startsWith('/mode')) {
       await Bot.sendMessage(message.chat.id, `Выберите модель`,{
         reply_markup: {
           inline_keyboard: [
-            [{text: `${modelsId[0]}`, callback_data: `${modelsId[0]}`}],
-            [{text: `${modelsId[1]}`, callback_data: `${modelsId[1]}`}],
-            [{text: `${modelsId[2]}`, callback_data: `${modelsId[2]}`}],
+            ...modelsId.map((model) => [{ text: model, callback_data: model }]),
             [{text: 'Закрыть Меню', callback_data: 'closeMenu'}]
           ]
     }})
     Bot.on('callback_query', async ctx => {
       try {
-          switch(ctx.data) {
-              case "closeMenu":
-                await Bot.deleteMessage(ctx.message!.chat.id, message.message_id);
-                  await Bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);
-                  break;
-              case `${modelsId[0]}`:
-                await Bot.sendMessage(ctx.message!.chat.id, `Установлена ${modelsId[0]} версия`);
-                break;
-              case `${modelsId[1]}`:
-                await Bot.sendMessage(ctx.message!.chat.id, `Установлена ${modelsId[1]} версия`);
-                break;
-              case `${modelsId[2]}`:
-                    await Bot.sendMessage(ctx.message!.chat.id, `Установлена ${modelsId[2]} версия`);
-                    break;
-
-          }
+        if(ctx.data =='closeMenu'){
+          await Bot.deleteMessage(ctx.message!.chat.id, message.message_id);
+          await Bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);
+          return;
+        }
+        if(modelsId.includes(`${ctx.data}`)){
+          Bot.sendMessage(ctx.message!.chat.id, `Установлена ${ctx.data} версия`);
+        return;
+        }
       }
       catch(error) {
         console.log(error);
@@ -63,7 +54,6 @@ Bot.on("text", async (message) => {
     })
       return;
     }
-
       const messageWait = await Bot.sendMessage(message.chat.id, `Бот генерирует ответ...`);
       const response = await getAnswer(message.text!, baseModel);
       await Bot.deleteMessage(messageWait.chat.id,messageWait.message_id);
@@ -71,10 +61,7 @@ Bot.on("text", async (message) => {
         reply_markup: { keyboard: [] },
         });
       }
-  
   catch(error) {
-
     console.log(error);
-
 }
 });

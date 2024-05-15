@@ -1,9 +1,5 @@
 import { $api } from "./index.js";
 
-
-
-
-
 const getQuestionTemplate = (message: string, model: string) => {
   return {
     model: model,

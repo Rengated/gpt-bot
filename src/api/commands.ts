@@ -1,5 +1,4 @@
-
-const commands = [
+export const commands = [
 
     {
         command: "start",
@@ -19,5 +18,3 @@ const commands = [
     },
 
 ]
-
-export {commands}
