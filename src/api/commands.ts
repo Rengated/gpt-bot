@@ -16,5 +16,9 @@ export const commands = [
         command: "help",
         description: "Раздел помощи"
     },
+    {
+        command: "profile",
+        description: "Профиль пользователя"
+    },
 
 ]
