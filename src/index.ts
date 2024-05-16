@@ -1,8 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
-import { commands } from "./api/commands.js";
-import { getAnswer } from "./api/getAnswer.js";
-import { modelsId } from "./api/models.js";
+import { commands, modelsId } from "./bot/config/config.js"
+import { handleQuestion } from "./bot/handlers/handleQuestion.js";
 import "dotenv/config";
+
 
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
@@ -11,9 +11,6 @@ const Bot = new TelegramBot(process.env.BOT_KEY!, {
   polling: true,
 });
 Bot.setMyCommands(commands);
-
-const admin_ids = [441931183, 1041271109, 1593186697, 2045172950];
-let baseModel = "gpt-3.5-turbo";
 
 // Обработчик текстовых сообщений
 Bot.on("text", async (message) => {
@@ -24,22 +21,17 @@ Bot.on("text", async (message) => {
     },
   });
   if (!user) {
-    await prisma.user.create({ data: { chatId: message.chat.id, model: baseModel } });
+    await prisma.user.create({ data: { chatId: message.chat.id } });
   }
-  try {
-    if (message.text!.startsWith("/start")) {
+    if (message.text! == "/start") {
       await Bot.sendMessage(message.chat.id, "Вы запустили бота!");
       return;
     }
-    if (message.text!.startsWith("/authorization")) {
-      await Bot.sendMessage(message.chat.id, "Авторизация пока не готова");
-      return;
-    }
-    if (message.text!.startsWith("/profile")) {
+    if (message.text! == "/profile") {
       await Bot.sendMessage(message.chat.id, `Ваша выбранная модель: ${user!.model}`);
       return;
     }
-    if (message.text!.startsWith("/mode")) {
+    if (message.text! =="/mode") {
       await Bot.sendMessage(message.chat.id, "Выберите модель", {
         reply_markup: {
           inline_keyboard: [...modelsId.map((model) => [{ text: model, callback_data: model }]), 
@@ -48,18 +40,11 @@ Bot.on("text", async (message) => {
       });
       return;
     }
-    const messageWait = await Bot.sendMessage(message.chat.id, "Бот генерирует ответ...");
-    const response = await getAnswer(message.text!, baseModel);
-    await Bot.deleteMessage(messageWait.chat.id, messageWait.message_id);
-    await Bot.sendMessage(message.chat.id, response, {
-      reply_markup: { keyboard: [] },
-    });
-  } catch (error) {
-    console.log(error);
+    await handleQuestion(Bot,message, user!);
   }
-});
+);
 
-await Bot.on("callback_query", async (ctx) => {
+Bot.on("callback_query", async (ctx) => {
   try {
     if (ctx.data == "closeMenu") {
       await Bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);

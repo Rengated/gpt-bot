@@ -13,7 +13,7 @@
       "skipLibCheck": true,      // Пропускает проверку типов в объявлениях библиотек
       "forceConsistentCasingInFileNames": true
     },
-    "include": ["src/**/*"],     
+    "include": ["src/**/*", "src/prisma"],     
     "exclude": ["node_modules"]  // Исключает папку node_modules из компиляции
   }
   

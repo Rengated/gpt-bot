@@ -1,3 +1,9 @@
+export const modelsId = [
+    'gpt-3.5-turbo',
+    'gpt-4-turbo',
+    'code-llama-70b'
+]
+
 export const commands = [
 
     {
@@ -5,16 +11,8 @@ export const commands = [
         description: "Запуск бота"
     },
     {
-        command: "authorization",
-        description: "Авторизация в боте"
-    },
-    {
         command: "mode",
         description: "Выбрать нейросеть"
-    },
-    {
-        command: "help",
-        description: "Раздел помощи"
     },
     {
         command: "profile",

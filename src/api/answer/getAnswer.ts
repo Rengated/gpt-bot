@@ -1,17 +1,6 @@
-import { $api } from "./index.js";
+import { $api } from "../index.js";
+import {getQuestionTemplate} from "../../utils/getQuestionTemplate.js"
 
-const getQuestionTemplate = (message: string, model: string) => {
-  return {
-    model: model,
-    messages: [
-      {
-        role: "user",
-        content: message,
-      },
-    ],
-    stream: false,
-  };
-};
 
 export const getAnswer = async (question: string, model:string): Promise<string> => {
   const template = getQuestionTemplate(question, model);
