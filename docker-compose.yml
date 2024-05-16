@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:latest  # Use the latest PostgreSQL version, or specify a version like postgres:13
+    restart: always
+    environment:
+      POSTGRES_DB: gpt      # Set the database name
+      POSTGRES_USER: user  # Set the username
+      POSTGRES_PASSWORD: password # Set the password
+    volumes:
+      - db_data:/var/lib/postgresql/data  # Mount the volume for persistence
+    ports:
+      - "5432:5432"  # Map port 5432 on the host to port 5432 in the container
+
+volumes:
+  db_data:  # This named volume gets mapped to /var/lib/postgresql/data in the container

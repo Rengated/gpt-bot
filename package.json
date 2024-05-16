@@ -5,6 +5,7 @@
     "start": "npx tsc && node ./dist/index.js"
   },
   "dependencies": {
+    "@prisma/client": "^5.14.0",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "node-telegram-bot-api": "^0.65.1",
