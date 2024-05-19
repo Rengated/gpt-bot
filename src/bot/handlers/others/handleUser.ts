@@ -18,7 +18,16 @@ export const handleUser = async (message: Message) => {
         subscription_id: 1,
       },
     });
+    const models = await prisma.model.findMany();
+    await prisma.requests.createMany({
+      data: [
+        ...models.map((model) => ({
+          chat_id: message.chat.id,
+          count: 0,
+          model_id: model.id,
+        })),
+      ],
+    });
   }
-
   return user;
 };

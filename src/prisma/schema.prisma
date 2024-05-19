@@ -21,28 +21,32 @@ model Model {
   name     String?
   Requests Requests[]
   Users    Users[]
+  Limits   Limits[]
 }
 
 model Requests {
-  id       Int    @id
+  id       Int    @id @default(autoincrement())
   chat_id  Int?
-  count    Int?
+  count    Int?   @default(0)
   model_id Int?
   Users    Users? @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
   Model    Model? @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_requests_models")
 }
 
 model Subscriptions {
-  id    Int     @id
-  name  String?
-  price Int?
-  Users Users[]
+  id     Int      @id
+  name   String?
+  price  Int?
+  Users  Users[]
+  Limits Limits[]
 }
 
 model Limits {
   model_id        Int
   subscription_id Int
   limits          Int?
+  Subscriptions   Subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Model           Model?         @relation(fields: [model_id], references: [id], map: "fk_limits_models")
 
   @@id([model_id, subscription_id])
 }
