@@ -16,5 +16,5 @@ export const reqeustAvailable = async (user: Users) => {
   });
   const userRequestCount = userRequest?.count as number;
 
-  return userRequestCount <= max;
+  return userRequestCount < max;
 };

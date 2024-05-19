@@ -44,7 +44,6 @@ export const handelProfile = async (args: HadnlerArgs) => {
       [item.Model?.name as string]: item.count,
     }))
   );
-  console.log(formatRequestCount);
 
   const limitsText = subLimits.map((item) => `🟢${item.Model?.name}: ${formatRequestCount[item.Model!.name as string]}/${item.limits}`).join("\n");
   const messageText = `
