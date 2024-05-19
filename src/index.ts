@@ -15,20 +15,21 @@ Bot.setMyCommands(commands);
 // Обработчик текстовых сообщений
 Bot.on("text", async (message) => {
   //Находим запись с чатайди пользователя
-  const user = await prisma.user.findFirst({
+  const user = await prisma.users.findFirst({
     where: {
-      chatId: message.chat.id,
+      chat_id: message.chat.id,
     },
   });
+  console.log('user',user)
   if (!user) {
-    await prisma.user.create({ data: { chatId: message.chat.id } });
+    await prisma.users.create({ data: { chat_id: message.chat.id, model_id: 1 } });
   }
     if (message.text! == "/start") {
       await Bot.sendMessage(message.chat.id, "Вы запустили бота!");
       return;
     }
     if (message.text! == "/profile") {
-      await Bot.sendMessage(message.chat.id, `Ваша выбранная модель: ${user!.model}`);
+      await Bot.sendMessage(message.chat.id, `Ваша выбранная модель: ${user!.model_id}`);
       return;
     }
     if (message.text! =="/mode") {
@@ -51,10 +52,14 @@ Bot.on("callback_query", async (ctx) => {
       return;
     }
     if(modelsId.includes(ctx.data!)) {
-      await prisma.user.update({
-        where: { chatId: ctx.message!.chat.id },
-        data: { model: `${ctx.data}` } 
-      });
+      const model = await prisma.model.findFirst({
+        where: {
+          name: ctx.data
+        }
+      })
+      await prisma.users.update({
+        where: { chat_id: ctx.message!.chat.id },
+        data: { model_id: model?.model_id}})
       await Bot.sendMessage(ctx.message!.chat.id, `Установлена ${ctx.data} версия`);
       return;
     }

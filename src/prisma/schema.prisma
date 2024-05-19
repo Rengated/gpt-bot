@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  chat_id  Int
+  model_id Int
+  Requests Requests[]
+
+  @@id([chat_id, model_id])
+}
+
+model Model {
+  model_id Int        @id
+  name     String
+  Limits   Limits[]
+  Requests Requests[]
+}
+
+model Requests {
+  request_id Int   @id
+  chat_id    Int
+  model_id   Int
+  count      Int
+  Users      Users @relation(fields: [chat_id, model_id], references: [chat_id, model_id], onDelete: NoAction, onUpdate: NoAction, map: "Requests_Users_fkey")
+  Model      Model @relation(fields: [model_id], references: [model_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_requests_models")
+}
+
+model Subscriptions {
+  subscription_id Int      @id
+  name            String
+  price           Int
+  Limits          Limits[]
+}
+
+model Limits {
+  model_id        Int
+  subscription_id Int
+  limits          Int
+  Model           Model         @relation(fields: [model_id], references: [model_id], onDelete: NoAction, onUpdate: NoAction)
+  Subscriptions   Subscriptions @relation(fields: [subscription_id], references: [subscription_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([model_id, subscription_id])
+}
