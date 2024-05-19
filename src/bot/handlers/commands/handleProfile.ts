@@ -11,6 +11,12 @@ export const handelProfile = async (args: HadnlerArgs) => {
     },
   });
 
+  const currentModel = await prisma.model.findFirst({
+    where: {
+      id: user.model_id as number,
+    },
+  });
+
   const subLimits = await prisma.limits.findMany({
     select: {
       Model: {
@@ -47,7 +53,10 @@ export const handelProfile = async (args: HadnlerArgs) => {
 
   const limitsText = subLimits.map((item) => `🟢${item.Model?.name}: ${formatRequestCount[item.Model!.name as string]}/${item.limits}`).join("\n");
   const messageText = `
-  🍕 Ваша подписка: ${subscription?.name}\n💵 Цена подписки: ${subscription?.price}р\nОсталось:\n${limitsText}
+  🍕Ваша подписка: ${subscription?.name}
+  💵Цена подписки: ${subscription?.price}р
+  Текущая модель ${currentModel?.name}
+  Осталось:\n${limitsText}
   `;
   await bot.sendMessage(message.chat.id, messageText);
 };
