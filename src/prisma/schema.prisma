@@ -8,42 +8,41 @@ datasource db {
 }
 
 model Users {
-  chat_id  Int        @unique
-  model_id Int
-  Requests Requests[]
-
-  @@id([chat_id, model_id])
+  chat_id         Int            @id
+  model_id        Int?
+  subscription_id Int?
+  Requests        Requests[]
+  Model           Model?         @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Subscriptions   Subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Model {
-  model_id Int        @id
-  name     String
-  Limits   Limits[]
+  id       Int        @id
+  name     String?
   Requests Requests[]
+  Users    Users[]
 }
 
 model Requests {
-  request_id Int   @id
-  chat_id    Int
-  model_id   Int
-  count      Int
-  Users      Users @relation(fields: [chat_id, model_id], references: [chat_id, model_id], onDelete: NoAction, onUpdate: NoAction, map: "Requests_Users_fkey")
-  Model      Model @relation(fields: [model_id], references: [model_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_requests_models")
+  id       Int    @id
+  chat_id  Int?
+  count    Int?
+  model_id Int?
+  Users    Users? @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
+  Model    Model? @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_requests_models")
 }
 
 model Subscriptions {
-  subscription_id Int      @id
-  name            String
-  price           Int
-  Limits          Limits[]
+  id    Int     @id
+  name  String?
+  price Int?
+  Users Users[]
 }
 
 model Limits {
   model_id        Int
   subscription_id Int
-  limits          Int
-  Model           Model         @relation(fields: [model_id], references: [model_id], onDelete: NoAction, onUpdate: NoAction)
-  Subscriptions   Subscriptions @relation(fields: [subscription_id], references: [subscription_id], onDelete: NoAction, onUpdate: NoAction)
+  limits          Int?
 
   @@id([model_id, subscription_id])
 }
