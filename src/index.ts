@@ -1,8 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
-import { commands, modelsId } from "./bot/config/config.js"
+import { commands, modelsId } from "./bot/config/config.js";
 import { handleQuestion } from "./bot/handlers/handleQuestion.js";
 import "dotenv/config";
-
 
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
@@ -20,30 +19,28 @@ Bot.on("text", async (message) => {
       chat_id: message.chat.id,
     },
   });
-  console.log('user',user)
+  console.log("user", user);
   if (!user) {
     await prisma.users.create({ data: { chat_id: message.chat.id, model_id: 1 } });
   }
-    if (message.text! == "/start") {
-      await Bot.sendMessage(message.chat.id, "Вы запустили бота!");
-      return;
-    }
-    if (message.text! == "/profile") {
-      await Bot.sendMessage(message.chat.id, `Ваша выбранная модель: ${user!.model_id}`);
-      return;
-    }
-    if (message.text! =="/mode") {
-      await Bot.sendMessage(message.chat.id, "Выберите модель", {
-        reply_markup: {
-          inline_keyboard: [...modelsId.map((model) => [{ text: model, callback_data: model }]), 
-          [{ text: "Закрыть Меню", callback_data: "closeMenu" }]]
-        },
-      });
-      return;
-    }
-    await handleQuestion(Bot,message, user!);
+  if (message.text! == "/start") {
+    await Bot.sendMessage(message.chat.id, "Вы запустили бота!");
+    return;
   }
-);
+  if (message.text! == "/profile") {
+    await Bot.sendMessage(message.chat.id, `Ваша выбранная модель: ${user!.model_id}`);
+    return;
+  }
+  if (message.text! == "/mode") {
+    await Bot.sendMessage(message.chat.id, "Выберите модель", {
+      reply_markup: {
+        inline_keyboard: [...modelsId.map((model) => [{ text: model, callback_data: model }]), [{ text: "Закрыть Меню", callback_data: "closeMenu" }]],
+      },
+    });
+    return;
+  }
+  await handleQuestion(Bot, message, user!);
+});
 
 Bot.on("callback_query", async (ctx) => {
   try {
@@ -51,15 +48,16 @@ Bot.on("callback_query", async (ctx) => {
       await Bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);
       return;
     }
-    if(modelsId.includes(ctx.data!)) {
+    if (modelsId.includes(ctx.data!)) {
       const model = await prisma.model.findFirst({
         where: {
-          name: ctx.data
-        }
-      })
+          name: ctx.data,
+        },
+      });
       await prisma.users.update({
         where: { chat_id: ctx.message!.chat.id },
-        data: { model_id: model?.model_id}})
+        data: { model_id: model?.model_id },
+      });
       await Bot.sendMessage(ctx.message!.chat.id, `Установлена ${ctx.data} версия`);
       return;
     }

@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Users {
-  chat_id  Int
+  chat_id  Int        @unique
   model_id Int
   Requests Requests[]
 
