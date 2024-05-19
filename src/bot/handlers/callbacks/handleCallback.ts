@@ -26,5 +26,7 @@ export const handleCallback = async (args: CallbackArgs) => {
     },
   });
 
-  await bot.sendMessage(ctx.message!.chat.id, `Установлена ${ctx.message?.text} версия`);
+  //@ts-ignore
+  const modelName = ctx.message?.reply_markup?.inline_keyboard.find((item) => item[0].callback_data == ctx.data)[0].text;
+  await bot.sendMessage(ctx.message!.chat.id, `Установлена ${modelName} версия`);
 };
