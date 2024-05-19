@@ -17,7 +17,7 @@ export const handleQuestion = async (args: HadnlerArgs) => {
   if (await reqeustAvailable(user)) {
     response = await getAnswer(message.text!, model!.name as string, user, successCalback);
   } else {
-    response = "You reach the limits";
+    response = "Вы превысили лимит запросов";
   }
 
   await bot.editMessageText(response, { chat_id: message.chat.id, message_id: messageWait.message_id });
