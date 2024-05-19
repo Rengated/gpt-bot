@@ -16,6 +16,7 @@ const commandsHandlers: { [key: string]: any } = {
   "/mode": handelMode,
 };
 
+const callbacksHandlers: { [key: string]: any } = {};
 bot.on("text", async (message) => {
   const user = await handleUser(message);
   if (Object.keys(commandsHandlers).includes(message.text as string)) {
@@ -25,46 +26,29 @@ bot.on("text", async (message) => {
   }
 
   await handleQuestion({ user, message, bot });
-
-  // if (message.text! == "/start") {
-  //   await Bot.sendMessage(message.chat.id, "Вы запустили бота!");
-  //   return;
-  // }
-  // if (message.text! == "/profile") {
-  //   await Bot.sendMessage(message.chat.id, `Ваша выбранная модель: ${user!.model_id}`);
-  //   return;
-  // }
-  // if (message.text! == "/mode") {
-  //   await Bot.sendMessage(message.chat.id, "Выберите модель", {
-  //     reply_markup: {
-  //       inline_keyboard: [...modelsId.map((model) => [{ text: model, callback_data: model }]), [{ text: "Закрыть Меню", callback_data: "closeMenu" }]],
-  //     },
-  //   });
-  //   return;
-  // }
-  // await handleQuestion(Bot, message, user!);
 });
 
-// Bot.on("callback_query", async (ctx) => {
-//   try {
-//     if (ctx.data == "closeMenu") {
-//       await Bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);
-//       return;
-//     }
-//     if (modelsId.includes(ctx.data!)) {
-//       const model = await prisma.model.findFirst({
-//         where: {
-//           name: ctx.data,
-//         },
-//       });
-//       await prisma.users.update({
-//         where: { chat_id: ctx.message!.chat.id },
-//         data: { model_id: model?.model_id },
-//       });
-//       await Bot.sendMessage(ctx.message!.chat.id, `Установлена ${ctx.data} версия`);
-//       return;
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+bot.on("callback_query", async (ctx) => {
+  await handleCallback;
+  // try {
+  //   if (ctx.data == "closeMenu") {
+  //     await bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);
+  //     return;
+  //   }
+  //   if (bot.includes(ctx.data!)) {
+  //     const model = await prisma.model.findFirst({
+  //       where: {
+  //         name: ctx.data,
+  //       },
+  //     });
+  //     await prisma.users.update({
+  //       where: { chat_id: ctx.message!.chat.id },
+  //       data: { model_id: model?.model_id },
+  //     });
+  //     await bot.sendMessage(ctx.message!.chat.id, `Установлена ${ctx.data} версия`);
+  //     return;
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
+});

@@ -11,6 +11,6 @@ export const handelProfile = async (args: HadnlerArgs) => {
     },
   });
 
-  const messageText = `Ваша подписка: ${sub?.name} \n Цена подписки: ${sub?.price}`;
+  const messageText = `Ваша подписка: ${sub?.name} \nЦена подписки: ${sub?.price}`;
   await bot.sendMessage(message.chat.id, messageText);
 };
