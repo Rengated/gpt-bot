@@ -2,6 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import { commands } from "./bot/config/config.js";
 import { handleUser, handleQuestion } from "./bot/handlers/others/index.js";
 import { handleStart, handelMode, handelProfile } from "./bot/handlers/commands/index.js";
+import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
 import "dotenv/config";
 
 const bot = new TelegramBot(process.env.BOT_KEY!, {
@@ -29,26 +30,6 @@ bot.on("text", async (message) => {
 });
 
 bot.on("callback_query", async (ctx) => {
-  await handleCallback;
-  // try {
-  //   if (ctx.data == "closeMenu") {
-  //     await bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);
-  //     return;
-  //   }
-  //   if (bot.includes(ctx.data!)) {
-  //     const model = await prisma.model.findFirst({
-  //       where: {
-  //         name: ctx.data,
-  //       },
-  //     });
-  //     await prisma.users.update({
-  //       where: { chat_id: ctx.message!.chat.id },
-  //       data: { model_id: model?.model_id },
-  //     });
-  //     await bot.sendMessage(ctx.message!.chat.id, `Установлена ${ctx.data} версия`);
-  //     return;
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  const user = await handleUser(ctx.message!);
+  await handleCallback({ ctx, bot, user });
 });
