@@ -15,7 +15,7 @@ export const handleQuestion = async (args: HadnlerArgs) => {
   });
   let response;
   if (await reqeustAvailable(user)) {
-    response = await getAnswer(message.text!, model!.name as string, user, successCalback);
+    response = await getAnswer(message.text!, model!.name as string, user, successCalback);//обновляет данные по кол-ву запросов
   } else {
     response = "Вы превысили лимит запросов";
   }

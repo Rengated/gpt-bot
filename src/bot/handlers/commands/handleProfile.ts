@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { HadnlerArgs } from "../../../types/HandlerArgs";
 
-export const handelProfile = async (args: HadnlerArgs) => {
+export const handleProfile = async (args: HadnlerArgs) => {
   const prisma = new PrismaClient();
   const { bot, message, user } = args;
 

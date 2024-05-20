@@ -1,7 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import { commands } from "./bot/config/config.js";
 import { handleUser, handleQuestion } from "./bot/handlers/others/index.js";
-import { handleStart, handelMode, handelProfile } from "./bot/handlers/commands/index.js";
+import { handleStart, handleMode, handleProfile, handlePay } from "./bot/handlers/commands/index.js";
 import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
 import "dotenv/config";
 
@@ -13,11 +13,11 @@ bot.setMyCommands(commands);
 
 const commandsHandlers: { [key: string]: any } = {
   "/start": handleStart,
-  "/profile": handelProfile,
-  "/mode": handelMode,
+  "/profile": handleProfile,
+  "/mode": handleMode,
+  "/pay": handlePay,
 };
 
-const callbacksHandlers: { [key: string]: any } = {};
 bot.on("text", async (message) => {
   const user = await handleUser(message);
   if (Object.keys(commandsHandlers).includes(message.text as string)) {
