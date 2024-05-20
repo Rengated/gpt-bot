@@ -19,6 +19,7 @@ model Users {
 model Model {
   id       Int        @id
   name     String?
+  family   String?    @default("chat")
   Requests Requests[]
   Users    Users[]
   Limits   Limits[]
