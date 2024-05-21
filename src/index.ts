@@ -25,7 +25,6 @@ bot.on("text", async (message) => {
     await messageHandler({ user, message, bot });
     return;
   }
-
   await handleQuestion({ user, message, bot });
 });
 

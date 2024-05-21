@@ -8,13 +8,13 @@
     "@prisma/client": "^5.14.0",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
-    "node-telegram-bot-api": "^0.65.1",
-    "typescript": "^5.4.5"
+    "node-telegram-bot-api": "^0.65.1"
   },
   "devDependencies": {
     "@types/node": "^20.12.11",
     "@types/node-telegram-bot-api": "^0.64.6",
-    "prisma": "^5.14.0"
+    "prisma": "^5.14.0",
+    "typescript": "^5.4.5"
   },
   "name": "gpt-bot",
   "description": "",

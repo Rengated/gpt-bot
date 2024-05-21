@@ -15,14 +15,14 @@ let config = {
 axios
   .request(config)
   .then((response) => {
-        modelsId = response.data.data.map(model => model.id);
+    modelsId = response.data.data.map((model) => ({ name: model.id, family: model.family }));
   })
   .catch((error) => {
     console.log(error);
   });
 
 setTimeout(() => {
-    console.log('modelsId:', modelsId); // Пример использования глобальной переменной
-  }, 5000);
+  console.log("modelsId:", modelsId); // Пример использования глобальной переменной
+}, 5000);
 
-export {modelsId}
+export { modelsId };
