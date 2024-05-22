@@ -7,7 +7,6 @@ export const getImage = async (question: string, model: string, user: Users, cal
   const template = getImageTemplate(question, model);
   try {
     const response = await $api.post("images/generations", template);
-    console.log(response.data);
     callback(user);
     return response.data.data[0].url;
   } catch (err) {
