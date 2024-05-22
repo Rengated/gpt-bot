@@ -14,15 +14,18 @@ model Users {
   Requests        Requests[]
   Model           Model?         @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Subscriptions   Subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Messages        Messages[]
+  Referals        Referals[]
 }
 
 model Model {
-  id       Int        @id
-  name     String?
-  family   String?    @default("chat")
-  Requests Requests[]
-  Users    Users[]
-  Limits   Limits[]
+  id             Int              @id
+  name           String?
+  family         String?          @default("chat")
+  Requests       Requests[]
+  Users          Users[]
+  Limits         Limits[]
+  ReferalBonuses ReferalBonuses[]
 }
 
 model Requests {
@@ -50,4 +53,25 @@ model Limits {
   Model           Model?         @relation(fields: [model_id], references: [id], map: "fk_limits_models")
 
   @@id([model_id, subscription_id])
+}
+
+model Messages {
+  id      Int    @id @default(autoincrement())
+  chat_id Int
+  Users   Users? @relation(fields: [chat_id], references: [chat_id])
+  text    String
+}
+
+model Referals {
+  reffed_by Int
+  chat_id   Int
+  Users     Users @relation(fields: [chat_id], references: [chat_id])
+
+  @@id([reffed_by, chat_id])
+}
+
+model ReferalBonuses {
+  id       Int   @id @default(autoincrement())
+  model_id Int
+  Model    Model @relation(fields: [model_id], references: [id])
 }
