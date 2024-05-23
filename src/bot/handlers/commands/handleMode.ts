@@ -1,11 +1,11 @@
-import { Model, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { HadnlerArgs } from "../../../types/HandlerArgs";
 
 export const handleMode = async (args: HadnlerArgs) => {
   const prisma = new PrismaClient();
   const { bot, message, user } = args;
 
-  const models = await prisma.model.findMany();
+  const models = await prisma.models.findMany();
   await bot.sendMessage(message.chat.id, "Выберите модель", {
     reply_markup: {
       //@ts-ignore

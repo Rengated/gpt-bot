@@ -10,7 +10,7 @@ export const handleQuestion = async (args: HadnlerArgs) => {
   const { bot, user, message } = args;
   const messageWait = await bot.sendMessage(message.chat.id, "Бот генерирует ответ...");
 
-  const model = await prisma.model.findFirst({
+  const model = await prisma.models.findFirst({
     where: {
       id: user.model_id as number,
     },

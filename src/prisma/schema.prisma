@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Users {
-  id                 Int                  @id
+  id                 Int                  @id @default(autoincrement())
   chat_id            String               @unique
   model_id           Int?
   referral_link      String?
@@ -30,22 +30,23 @@ model Limits {
 }
 
 model Messages {
-  id      Int     @id
+  id      Int     @id @default(autoincrement())
   chat_id String?
   text    String?
   Users   Users?  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Models {
-  id              Int               @id
+  id              Int               @id @default(autoincrement())
   name            String?
+  family          String            @default("chat")
   Limits          Limits[]
   ReferralBonuses ReferralBonuses[]
   Requests        Requests[]
 }
 
 model ReferralBonuses {
-  id       Int     @id
+  id       Int     @id @default(autoincrement())
   model_id Int?
   count    Int?
   Models   Models? @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -60,7 +61,7 @@ model Referrals {
 }
 
 model Requests {
-  id       Int     @id
+  id       Int     @id @default(autoincrement())
   chat_id  String?
   count    Int?
   model_id Int?
@@ -69,7 +70,7 @@ model Requests {
 }
 
 model Subscriptions {
-  id                 Int                  @id
+  id                 Int                  @id @default(autoincrement())
   name               String?
   price              Int?
   Limits             Limits[]
@@ -77,7 +78,7 @@ model Subscriptions {
 }
 
 model Transactions {
-  id        Int       @id
+  id        Int       @id @default(autoincrement())
   chat_id   String?
   payload   String?
   createdAt DateTime? @db.Date
@@ -85,7 +86,7 @@ model Transactions {
 }
 
 model User_subscriptions {
-  id              Int            @id
+  id              Int            @id @default(autoincrement())
   chat_id         String?
   subscription_id Int?
   dateStart       DateTime?      @db.Date

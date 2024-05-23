@@ -16,13 +16,18 @@ export const handleUser = async (message: Message) => {
       data: {
         chat_id: String(message.chat.id),
         model_id: 1,
-        subscription_id: 1,
         referral_link: generateRefLink(message.chat.id),
       },
     });
 
-    await prisma.referals.
-    const models = await prisma.model.findMany();
+    await prisma.user_subscriptions.create({
+      data: {
+        chat_id: String(message.chat.id),
+        subscription_id: 1,
+      },
+    });
+
+    const models = await prisma.models.findMany();
     await prisma.requests.createMany({
       data: [
         ...models.map((model) => ({

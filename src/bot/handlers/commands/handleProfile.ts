@@ -5,13 +5,19 @@ export const handleProfile = async (args: HadnlerArgs) => {
   const prisma = new PrismaClient();
   const { bot, message, user } = args;
 
-  const subscription = await prisma.subscriptions.findFirst({
+  const userSubscription = await prisma.user_subscriptions.findFirst({
     where: {
-      id: user.subscription_id as number,
+      chat_id: user.chat_id,
     },
   });
 
-  const currentModel = await prisma.model.findFirst({
+  const subscription = await prisma.subscriptions.findFirst({
+    where: {
+      id: userSubscription?.id,
+    },
+  });
+
+  const currentModel = await prisma.models.findFirst({
     where: {
       id: user.model_id as number,
     },
@@ -19,7 +25,7 @@ export const handleProfile = async (args: HadnlerArgs) => {
 
   const subLimits = await prisma.limits.findMany({
     select: {
-      Model: {
+      Models: {
         select: {
           name: true,
         },
@@ -27,12 +33,12 @@ export const handleProfile = async (args: HadnlerArgs) => {
       Subscriptions: true,
       limits: true,
     },
-    where: { subscription_id: user.subscription_id as number },
+    where: { subscription_id: subscription?.id as number },
   });
 
   const requestsCount = await prisma.requests.findMany({
     select: {
-      Model: {
+      Models: {
         select: {
           name: true,
         },
@@ -47,11 +53,11 @@ export const handleProfile = async (args: HadnlerArgs) => {
   const formatRequestCount = Object.assign(
     //@ts-ignore
     ...requestsCount.map((item) => ({
-      [item.Model?.name as string]: item.count,
+      [item.Models?.name as string]: item.count,
     }))
   );
 
-  const limitsText = subLimits.map((item) => `🟢${item.Model?.name}: ${formatRequestCount[item.Model!.name as string]}/${item.limits}`).join("\n");
+  const limitsText = subLimits.map((item) => `🟢${item.Models?.name}: ${formatRequestCount[item.Models!.name as string]}/${item.limits}`).join("\n");
   const messageText = `
   🍕Ваша подписка: ${subscription?.name}
   💵Цена подписки: ${subscription?.price}р
