@@ -19,7 +19,7 @@ export const handleCallback = async (args: CallbackArgs) => {
   if (ctx.message?.text == "Выберите модель") {
     await prisma.users.update({
       where: {
-        chat_id: ctx.message?.chat.id,
+        chat_id: String(ctx.message?.chat.id),
       },
       data: {
         model_id: Number(ctx.data),
@@ -62,7 +62,7 @@ export const handleCallback = async (args: CallbackArgs) => {
 
         await prisma.users.update({
           where: {
-            chat_id: ctx.message?.chat.id,
+            chat_id: String(ctx.message?.chat.id),
           },
           data: {
             subscription_id: Number(ctx.data),

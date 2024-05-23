@@ -7,7 +7,7 @@ export const successCalback = async (user: Users, message?: string) => {
     await prisma.messages.create({
       data: {
         text: message!,
-        chat_id: user.chat_id,
+        chat_id: String(user.chat_id),
       },
     });
 
@@ -28,7 +28,7 @@ export const successCalback = async (user: Users, message?: string) => {
   }
 
   await prisma.requests.updateMany({
-    where: { AND: [{ chat_id: user.chat_id as number }, { model_id: user.model_id as number }] },
+    where: { AND: [{ chat_id: user.chat_id }, { model_id: user.model_id as number }] },
     data: {
       count: {
         increment: 1,

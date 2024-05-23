@@ -8,70 +8,89 @@ datasource db {
 }
 
 model Users {
-  chat_id         Int            @id
-  model_id        Int?
-  subscription_id Int?
-  Requests        Requests[]
-  Model           Model?         @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Subscriptions   Subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Messages        Messages[]
-  Referals        Referals[]
-}
-
-model Model {
-  id             Int              @id
-  name           String?
-  family         String?          @default("chat")
-  Requests       Requests[]
-  Users          Users[]
-  Limits         Limits[]
-  ReferalBonuses ReferalBonuses[]
-}
-
-model Requests {
-  id       Int    @id @default(autoincrement())
-  chat_id  Int?
-  count    Int?   @default(0)
-  model_id Int?
-  Users    Users? @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
-  Model    Model? @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_requests_models")
-}
-
-model Subscriptions {
-  id     Int      @id
-  name   String?
-  price  Int?
-  Users  Users[]
-  Limits Limits[]
+  chat_id            Int                  @id
+  model_id           Int?
+  referral_link      String?
+  Messages           Messages[]
+  Referrals          Referrals[]
+  Requests           Requests[]
+  Transactions       Transactions[]       @ignore
+  User_subscriptions User_subscriptions[]
 }
 
 model Limits {
   model_id        Int
   subscription_id Int
   limits          Int?
-  Subscriptions   Subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Model           Model?         @relation(fields: [model_id], references: [id], map: "fk_limits_models")
+  Models          Models        @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Subscriptions   Subscriptions @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([model_id, subscription_id])
 }
 
 model Messages {
-  id      Int    @id @default(autoincrement())
-  chat_id Int
-  Users   Users? @relation(fields: [chat_id], references: [chat_id])
-  text    String
+  id      Int     @id
+  chat_id Int?
+  text    String?
+  Users   Users?  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model Referals {
-  reffed_by Int
-  chat_id   Int
-  Users     Users @relation(fields: [chat_id], references: [chat_id])
-
-  @@id([reffed_by, chat_id])
+model Models {
+  id              Int               @id
+  name            String?
+  Limits          Limits[]
+  ReferralBonuses ReferralBonuses[]
+  Requests        Requests[]
 }
 
-model ReferalBonuses {
-  id       Int   @id @default(autoincrement())
-  model_id Int
-  Model    Model @relation(fields: [model_id], references: [id])
+model ReferralBonuses {
+  id       Int     @id
+  model_id Int?
+  count    Int?
+  Models   Models? @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Referrals {
+  chat_id     Int
+  referral_id Int
+  Users       Users @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([chat_id, referral_id])
+}
+
+model Requests {
+  id       Int     @id
+  chat_id  Int?
+  count    Int?
+  model_id Int?
+  Users    Users?  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
+  Models   Models? @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Subscriptions {
+  id                 Int                  @id
+  name               String?
+  price              Int?
+  Limits             Limits[]
+  User_subscriptions User_subscriptions[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Transactions {
+  chat_id   Int?
+  payload   String?
+  createdAt DateTime? @db.Date
+  Users     Users?    @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
+}
+
+model User_subscriptions {
+  id              Int            @id
+  chat_id         Int?
+  subscription_id Int?
+  dateStart       DateTime?      @db.Date
+  dateEnd         DateTime?      @db.Date
+  Users           Users?         @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
+  Subscriptions   Subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

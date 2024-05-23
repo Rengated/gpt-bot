@@ -4,6 +4,7 @@ import { handleUser, handleQuestion } from "./bot/handlers/others/index.js";
 import { handleStart, handleMode, handleProfile, handlePay } from "./bot/handlers/commands/index.js";
 import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
 import "dotenv/config";
+import { handleRefLink } from "./bot/handlers/commands/handleRefLink.js";
 
 const bot = new TelegramBot(process.env.BOT_KEY!, {
   polling: true,
@@ -12,16 +13,18 @@ const bot = new TelegramBot(process.env.BOT_KEY!, {
 bot.setMyCommands(commands);
 
 const commandsHandlers: { [key: string]: any } = {
-  "/start": handleStart,
-  "/profile": handleProfile,
-  "/mode": handleMode,
-  "/pay": handlePay,
+  start: handleStart,
+  profile: handleProfile,
+  mode: handleMode,
+  pay: handlePay,
+  mylink: handleRefLink,
 };
 
 bot.on("text", async (message) => {
   const user = await handleUser(message);
-  if (Object.keys(commandsHandlers).includes(message.text as string)) {
-    const messageHandler = commandsHandlers[message.text as string];
+  if (Object.keys(commandsHandlers).some((key) => message.text?.includes(key))) {
+    const handlerKey = Object.keys(commandsHandlers).find((key) => message.text?.includes(key));
+    const messageHandler = commandsHandlers[handlerKey as string];
     await messageHandler({ user, message, bot });
     return;
   }
