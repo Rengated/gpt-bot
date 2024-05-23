@@ -8,13 +8,14 @@ datasource db {
 }
 
 model Users {
-  chat_id            Int                  @id
+  id                 Int                  @id
+  chat_id            String               @unique
   model_id           Int?
   referral_link      String?
   Messages           Messages[]
   Referrals          Referrals[]
   Requests           Requests[]
-  Transactions       Transactions[]       @ignore
+  Transactions       Transactions[]
   User_subscriptions User_subscriptions[]
 }
 
@@ -30,7 +31,7 @@ model Limits {
 
 model Messages {
   id      Int     @id
-  chat_id Int?
+  chat_id String?
   text    String?
   Users   Users?  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -51,16 +52,16 @@ model ReferralBonuses {
 }
 
 model Referrals {
-  chat_id     Int
+  chat_id     String
   referral_id Int
-  Users       Users @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
+  Users       Users  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([chat_id, referral_id])
 }
 
 model Requests {
   id       Int     @id
-  chat_id  Int?
+  chat_id  String?
   count    Int?
   model_id Int?
   Users    Users?  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
@@ -75,19 +76,17 @@ model Subscriptions {
   User_subscriptions User_subscriptions[]
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model Transactions {
-  chat_id   Int?
+  id        Int       @id
+  chat_id   String?
   payload   String?
   createdAt DateTime? @db.Date
   Users     Users?    @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@ignore
 }
 
 model User_subscriptions {
   id              Int            @id
-  chat_id         Int?
+  chat_id         String?
   subscription_id Int?
   dateStart       DateTime?      @db.Date
   dateEnd         DateTime?      @db.Date
