@@ -24,6 +24,8 @@ export const handleUser = async (message: Message) => {
       data: {
         chat_id: String(message.chat.id),
         subscription_id: 1,
+        dateStart: new Date(),
+        dateEnd: new Date(),
       },
     });
 

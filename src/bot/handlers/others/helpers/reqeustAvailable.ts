@@ -2,6 +2,7 @@ import { PrismaClient, Users } from "@prisma/client";
 
 export const reqeustAvailable = async (user: Users) => {
   let bonus = 0;
+
   const prisma = new PrismaClient();
 
   const referals = (
@@ -33,9 +34,10 @@ export const reqeustAvailable = async (user: Users) => {
 
   const limit = await prisma.limits.findFirst({
     where: {
-      AND: [{ model_id: user.model_id as number }, { subscription_id: userSubscription!.id }],
+      AND: [{ model_id: user.model_id as number }, { subscription_id: userSubscription!.subscription_id! }],
     },
   });
+
   const max = limit?.limits! + bonus;
 
   const userRequest = await prisma.requests.findFirst({

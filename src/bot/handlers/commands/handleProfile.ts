@@ -24,7 +24,7 @@ export const handleProfile = async (args: HadnlerArgs) => {
 
   const subscription = await prisma.subscriptions.findFirst({
     where: {
-      id: userSubscription?.id,
+      id: userSubscription?.subscription_id!,
     },
   });
 
@@ -65,9 +65,11 @@ export const handleProfile = async (args: HadnlerArgs) => {
       count: true,
     },
     where: {
-      chat_id: String(user.chat_id),
+      chat_id: user.chat_id,
     },
   });
+
+  console.log(requestsCount);
 
   const formatRequestCount = Object.assign(
     //@ts-ignore
