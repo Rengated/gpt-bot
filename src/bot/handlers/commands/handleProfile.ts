@@ -1,9 +1,20 @@
-import { PrismaClient } from "@prisma/client";
+import { Limits, PrismaClient } from "@prisma/client";
 import { HadnlerArgs } from "../../../types/HandlerArgs";
 
 export const handleProfile = async (args: HadnlerArgs) => {
   const prisma = new PrismaClient();
   const { bot, message, user } = args;
+
+  const referals = (
+    await prisma.referrals.aggregate({
+      where: {
+        chat_id: user.chat_id,
+      },
+      _count: {
+        id: true,
+      },
+    })
+  )._count.id;
 
   const userSubscription = await prisma.user_subscriptions.findFirst({
     where: {
@@ -27,6 +38,14 @@ export const handleProfile = async (args: HadnlerArgs) => {
     select: {
       Models: {
         select: {
+          ReferralBonuses: {
+            where: {
+              model_id: user.model_id,
+            },
+            select: {
+              count: true,
+            },
+          },
           name: true,
         },
       },
@@ -57,12 +76,19 @@ export const handleProfile = async (args: HadnlerArgs) => {
     }))
   );
 
-  const limitsText = subLimits.map((item) => `🟢${item.Models?.name}: ${formatRequestCount[item.Models!.name as string]}/${item.limits}`).join("\n");
-  const messageText = `
-  🍕Ваша подписка: ${subscription?.name}
-  💵Цена подписки: ${subscription?.price}р
-  Текущая модель ${currentModel?.name}
-  Осталось:\n${limitsText}
-  `;
+  const countLimits = (item: Limits) => {
+    //@ts-ignore
+    return item.limits! + item.Models.ReferralBonuses[0].count! * referals;
+  };
+
+  //@ts-ignore
+  const limitsText = subLimits.map((item) => `🟢${item.Models?.name}: ${formatRequestCount[item.Models!.name as string]}/${countLimits(item)}`).join("\n");
+  const messageText =
+    `Ваша подписка: ${subscription?.name}` +
+    `\nКоличество ваших рефералов: ${referals}` +
+    `\nЦена подписки: ${subscription?.price}р` +
+    `\nТекущая модель ${currentModel?.name}` +
+    `\nОсталось :\n${limitsText}`;
+
   await bot.sendMessage(message.chat.id, messageText);
 };

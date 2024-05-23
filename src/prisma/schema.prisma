@@ -53,11 +53,10 @@ model ReferralBonuses {
 }
 
 model Referrals {
+  id          Int    @id @default(autoincrement())
   chat_id     String
-  referral_id Int
+  referral_id String
   Users       Users  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([chat_id, referral_id])
 }
 
 model Requests {
