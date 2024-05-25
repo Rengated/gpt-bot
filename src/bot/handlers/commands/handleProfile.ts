@@ -21,7 +21,12 @@ export const handleProfile = async (args: HadnlerArgs) => {
       chat_id: user.chat_id,
     },
   });
-
+  const referalBon = await prisma.referralBonuses.findFirst({
+    where:{
+      model_id: user.model_id
+    }
+  })
+  console.log('ref',referalBon)
   const subscription = await prisma.subscriptions.findFirst({
     where: {
       id: userSubscription?.subscription_id!,
@@ -39,9 +44,6 @@ export const handleProfile = async (args: HadnlerArgs) => {
       Models: {
         select: {
           ReferralBonuses: {
-            where: {
-              model_id: user.model_id,
-            },
             select: {
               count: true,
             },
@@ -54,7 +56,7 @@ export const handleProfile = async (args: HadnlerArgs) => {
     },
     where: { subscription_id: subscription?.id as number },
   });
-
+  // console.log('sub',subLimits)
   const requestsCount = await prisma.requests.findMany({
     select: {
       Models: {
@@ -69,7 +71,7 @@ export const handleProfile = async (args: HadnlerArgs) => {
     },
   });
 
-  console.log(requestsCount);
+  console.log('req',requestsCount);
 
   const formatRequestCount = Object.assign(
     //@ts-ignore

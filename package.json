@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
+    "@types/md5": "^2.3.5",
     "axios": "^1.6.8",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
+    "md5": "^2.3.0",
     "node-telegram-bot-api": "^0.65.1"
   },
   "devDependencies": {
