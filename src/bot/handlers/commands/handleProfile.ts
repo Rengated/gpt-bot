@@ -67,8 +67,6 @@ export const handleProfile = async (args: HadnlerArgs) => {
     },
   });
 
-  console.log(requestsCount);
-
   const formatRequestCount = Object.assign(
     //@ts-ignore
     ...requestsCount.map((item) => ({
@@ -78,7 +76,7 @@ export const handleProfile = async (args: HadnlerArgs) => {
 
   const countLimits = (item: Limits) => {
     //@ts-ignore
-    console.log(item.Models);
+
     //@ts-ignore
     return item.limits! + item.Models.ReferralBonuses[0].count! * referals;
   };
