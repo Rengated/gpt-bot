@@ -13,12 +13,21 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot)=>
     });
     await prisma.user_subscriptions.updateMany({
     where: {
-        chat_id: String(msg.chat.id)
+        chat_id: chat_id,
     },
     data: {
         subscription_id: Number(sub_id),
     }
     });
+    await prisma.transactions.updateMany({
+        where:{
+            chat_id: chat_id,
+        },
+        data:{
+            status: 'Succesful'
+        }
+    })
+    await bot.deleteMessage(msg.chat.id, msg.message_id-1);
     console.log('Платёж успешно завершён:', msg);
     await bot.sendMessage(msg.chat.id, `Спасибо за платеж! \nВы купили ${subscription?.name} подписку`);
     }

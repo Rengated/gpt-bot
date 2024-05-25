@@ -49,7 +49,6 @@ export const handleCallback = async (args: CallbackArgs) => {
         id: currently_sub_id!
       }
     }))?.name
-    console.log(currently_sub_id)
     //Информация по подписке, которую выбрал пользователь
     const subscription = await prisma.subscriptions.findFirst({
       where: {
@@ -65,7 +64,7 @@ export const handleCallback = async (args: CallbackArgs) => {
       const invoice = {
         title: `Покупка подписки ${subname}⚡️`,
         description: `Стоимость подписки: ${(amount!/100).toFixed(2)} RUB`,
-        payload: `${ctx.message.chat.id}${Date.now()}${price_digit}${subId}`,
+        payload: `-${price_digit}${subId}`,
         stripeToken: '381764678:TEST:85676',
         currency: 'RUB',
         prices: [{label: "Оплата", amount: amount!, }]

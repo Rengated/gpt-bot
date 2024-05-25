@@ -81,6 +81,7 @@ model Transactions {
   chat_id   String?
   payload   String?
   createdAt DateTime? @db.Date
+  status    String?   
   Users     Users?    @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
