@@ -1,5 +1,6 @@
 import { Limits, PrismaClient } from "@prisma/client";
 import { HadnlerArgs } from "../../../types/HandlerArgs";
+import { it } from "node:test";
 
 export const handleProfile = async (args: HadnlerArgs) => {
   const prisma = new PrismaClient();
@@ -71,8 +72,6 @@ export const handleProfile = async (args: HadnlerArgs) => {
     },
   });
 
-  console.log('req',requestsCount);
-
   const formatRequestCount = Object.assign(
     //@ts-ignore
     ...requestsCount.map((item) => ({
@@ -81,6 +80,8 @@ export const handleProfile = async (args: HadnlerArgs) => {
   );
 
   const countLimits = (item: Limits) => {
+    //@ts-ignore
+
     //@ts-ignore
     return item.limits! + item.Models.ReferralBonuses[0].count! * referals;
   };
