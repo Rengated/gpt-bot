@@ -5,7 +5,7 @@ import { handleStart, handleMode, handleProfile, handlePay } from "./bot/handler
 import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
 import { handleRefLink } from "./bot/handlers/commands/handleRefLink.js";
 import { succesfulPay } from "./bot/handlers/callbacks/payments/succesfulPay.js";
-import { preCheckout } from "./bot/handlers/callbacks/payments/preCheckout.js";
+import { preCheckout } from "./bot/handlers/callbacks/payments/preCheckOut.js";
 import "dotenv/config";
 
 const bot = new TelegramBot(process.env.BOT_KEY!, {
