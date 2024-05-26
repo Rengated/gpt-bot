@@ -23,11 +23,11 @@ export const handleProfile = async (args: HadnlerArgs) => {
     },
   });
   const referalBon = await prisma.referralBonuses.findFirst({
-    where:{
-      model_id: user.model_id
-    }
-  })
-  console.log('ref',referalBon)
+    where: {
+      model_id: user.model_id,
+    },
+  });
+  console.log("ref", referalBon);
   const subscription = await prisma.subscriptions.findFirst({
     where: {
       id: userSubscription?.subscription_id!,
@@ -85,6 +85,8 @@ export const handleProfile = async (args: HadnlerArgs) => {
     //@ts-ignore
     return item.limits! + item.Models.ReferralBonuses[0].count! * referals;
   };
+
+  /* TODO добавить длительность подписки и дату обновления лимитов */
 
   //@ts-ignore
   const limitsText = subLimits.map((item) => `🟢${item.Models?.name}: ${formatRequestCount[item.Models!.name as string]}/${countLimits(item)}`).join("\n");

@@ -1,3 +1,5 @@
+/* TODO вставить ссылку на бота переменной из окружения*/
+
 import { HadnlerArgs } from "../../../types/HandlerArgs.js";
 
 export const handleRefLink = async (args: HadnlerArgs) => {

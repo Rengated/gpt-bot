@@ -40,6 +40,8 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
     },
   });
 
+  /* TODO обновление длительности подписки */
+
   await bot.deleteMessage(msg.chat.id, msg.message_id - 1);
   console.log("Платёж успешно завершён:", msg);
 

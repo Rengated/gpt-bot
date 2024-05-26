@@ -45,3 +45,5 @@ bot.on("pre_checkout_query", async (query) => {
 bot.on("successful_payment", async (msg) => {
   await succesfulPay(msg, bot);
 });
+
+/* TODO добавить крон модуль для обновелния лимитов по подписке */

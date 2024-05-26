@@ -20,6 +20,7 @@ export const handleUser = async (message: Message) => {
       },
     });
 
+    /* TODO дату окончания сделать валидной и равной пару лет например */
     await prisma.user_subscriptions.create({
       data: {
         chat_id: String(message.chat.id),
