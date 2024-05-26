@@ -2,11 +2,11 @@ import TelegramBot from "node-telegram-bot-api";
 import { commands } from "./bot/config/config.js";
 import { handleUser, handleQuestion } from "./bot/handlers/others/index.js";
 import { handleStart, handleMode, handleProfile, handlePay } from "./bot/handlers/commands/index.js";
-import { handleCallback} from "./bot/handlers/callbacks/handleCallback.js";
-import "dotenv/config";
+import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
 import { handleRefLink } from "./bot/handlers/commands/handleRefLink.js";
 import { succesfulPay } from "./bot/handlers/callbacks/payments/succesfulPay.js";
-import { preCheckOut } from "./bot/handlers/callbacks/payments/preCheckOut.js";
+import { preCheckout } from "./bot/handlers/callbacks/payments/preCheckout.js";
+import "dotenv/config";
 
 const bot = new TelegramBot(process.env.BOT_KEY!, {
   polling: true,
@@ -36,13 +36,12 @@ bot.on("text", async (message) => {
 bot.on("callback_query", async (ctx) => {
   const user = await handleUser(ctx.message!);
   await handleCallback({ ctx, bot, user });
-  
 });
 
-bot.on('pre_checkout_query',async (query) =>{
-  await preCheckOut(query, bot);
+bot.on("pre_checkout_query", async (query) => {
+  await preCheckout(query, bot);
 });
 
-bot.on('successful_payment', async (msg) => {
+bot.on("successful_payment", async (msg) => {
   await succesfulPay(msg, bot);
 });

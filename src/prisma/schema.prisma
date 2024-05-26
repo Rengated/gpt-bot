@@ -74,20 +74,23 @@ model Subscriptions {
   price              Int?
   Limits             Limits[]
   User_subscriptions User_subscriptions[]
+  Transactions       Transactions[]
 }
 
 model Transactions {
-  id        Int       @id @default(autoincrement())
-  chat_id   String?
-  payload   String?
-  createdAt DateTime? @db.Date
-  status    String?   
-  Users     Users?    @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
+  id               Int           @id @default(autoincrement())
+  chat_id          String?
+  createdAt        DateTime?     @db.Date
+  status           String?
+  subscriptions_id Int
+  duration         DateTime?
+  Users            Users?        @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
+  Subscriptions    Subscriptions @relation(fields: [subscriptions_id], references: [id])
 }
 
 model User_subscriptions {
   id              Int            @id @default(autoincrement())
-  chat_id         String?
+  chat_id         String?        @unique
   subscription_id Int?
   dateStart       DateTime?      @db.Date
   dateEnd         DateTime?      @db.Date

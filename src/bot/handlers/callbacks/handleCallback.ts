@@ -1,7 +1,7 @@
 import { Users } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
-
-import TelegramBot, { CallbackQuery, LabeledPrice } from "node-telegram-bot-api";
+import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
+import "dotenv/config";
 
 interface CallbackArgs {
   bot: TelegramBot;
@@ -11,7 +11,7 @@ interface CallbackArgs {
 export const handleCallback = async (args: CallbackArgs) => {
   const prisma = new PrismaClient();
   const { bot, user, ctx } = args;
-  const chat_id = String(ctx.message?.chat.id)
+  const chat_id = String(ctx.message?.chat.id);
   if (ctx.data == "close") {
     await bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);
     return;
@@ -31,64 +31,56 @@ export const handleCallback = async (args: CallbackArgs) => {
     await bot.sendMessage(ctx.message!.chat.id, `Установлена ${modelName} версия`);
   }
 
-  
-
   if (ctx.message?.text === "Выберите подписку") {
     const user = await prisma.users.findUnique({
       where: {
         chat_id: chat_id,
       },
-      include: {
-        User_subscriptions: true, // Включает связанные записи из таблицы User_subscriptions
+      select: {
+        chat_id: true,
+        User_subscriptions: true,
       },
     });
-    let user_sub = user?.User_subscriptions
-    let currently_sub_id = user_sub?.map(subscription=>subscription.subscription_id)[0]
-    const currently_sub_name = (await prisma.subscriptions.findUnique({
-      where:{
-        id: currently_sub_id!
-      }
-    }))?.name
-    //Информация по подписке, которую выбрал пользователь
+
     const subscription = await prisma.subscriptions.findFirst({
       where: {
-        id: Number(ctx.data!)
+        id: Number(ctx.data!),
       },
     });
-    const subId = subscription?.id;
-    const subname = subscription?.name;
-    if (subId !== currently_sub_id ) {
-      const price_digit = subscription?.price;
-      const amount = Math.round(price_digit!*100);
+
+    const duration = new Date();
+    duration.setMonth(duration.getMonth() + 1);
+    duration.toISOString();
+
+    const transaction = await prisma.transactions.create({
+      data: {
+        createdAt: new Date(),
+        duration,
+        chat_id: user?.chat_id,
+        status: "inProcess",
+        subscriptions_id: subscription!.id,
+      },
+    });
+
+    if (subscription?.id !== user?.User_subscriptions[0].subscription_id) {
+      const price = Math.round(subscription?.price! * 100);
 
       const invoice = {
-        title: `Покупка подписки ${subname}⚡️`,
-        description: `Стоимость подписки: ${(amount!/100).toFixed(2)} RUB`,
-        payload: `-${price_digit}${subId}`,
-        stripeToken: '381764678:TEST:85676',
-        currency: 'RUB',
-        prices: [{label: "Оплата", amount: amount!, }]
+        title: `Покупка подписки ${subscription?.name}⚡️`,
+        description: `Стоимость подписки: ${(price! / 100).toFixed(2)} RUB`,
+        stripeToken: process.env.STRIPE_TOKEN,
+        payload: String(transaction.id),
+        currency: "RUB",
+        prices: [{ label: "Оплата", amount: price! }],
+      };
+      try {
+        await bot.sendInvoice(ctx.message.chat.id, invoice.title, invoice.description, invoice.payload, invoice.stripeToken!, invoice.currency, invoice.prices);
+      } catch (error) {
+        console.error("Error sending invoice:", error);
       }
-
-    try{
-      await bot.sendInvoice(
-        ctx.message.chat.id,
-        invoice.title,                         
-        invoice.description,  
-        invoice.payload,
-        invoice.stripeToken,
-        invoice.currency,
-        invoice.prices
-      );
-    }catch (error) {
-      console.error('Error sending invoice:', error);
-    }}
-    else{
-        bot.sendMessage(ctx.message!.chat.id, `У вас уже установлена ${currently_sub_name} подписка`);
+      return;
     }
+
+    bot.sendMessage(ctx.message!.chat.id, `У вас уже установлена ${subscription?.name} подписка`);
   }
-}
-
-
-
-
+};
