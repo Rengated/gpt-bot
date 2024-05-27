@@ -1,7 +1,6 @@
 import TelegramBot from "node-telegram-bot-api";
 import { commands } from "./bot/config/config.js";
-import {myCronJob} from "./bot/cron/cronCheckDB.js"
-import cron from "node-cron";
+import { myCronJob } from "./bot/cron/cronCheckDB.js";
 import { handleUser, handleQuestion } from "./bot/handlers/others/index.js";
 import { handleStart, handleMode, handleProfile, handlePay } from "./bot/handlers/commands/index.js";
 import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
@@ -48,6 +47,6 @@ bot.on("successful_payment", async (msg) => {
   await succesfulPay(msg, bot);
 });
 
-myCronJob()
+myCronJob();
 
 /* TODO добавить крон модуль для обновелния лимитов по подписке */
