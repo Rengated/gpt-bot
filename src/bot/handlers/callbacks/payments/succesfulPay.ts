@@ -45,9 +45,12 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
       duration: subscription?.duration_sub
     },
   });
-
-  await bot.deleteMessage(msg.chat.id, msg.message_id - 1);
-  console.log("Платёж успешно завершён:", msg);
+  try{
+    await bot.deleteMessage(msg.chat.id, msg.message_id - 1);
+  }catch (error){
+    console.log('error',error)
+  }
+  console.log("Платёж успешно завершён:", msg);~
 
   await bot.sendMessage(msg.chat.id, `Спасибо за платеж! \nВы купили ${subscription?.name} подписку`);
 };
