@@ -10,7 +10,6 @@ import { succesfulPay } from "./bot/handlers/callbacks/payments/succesfulPay.js"
 import { preCheckout } from "./bot/handlers/callbacks/payments/preCheckOut.js";
 import "dotenv/config";
 
-
 const bot = new TelegramBot(process.env.BOT_KEY!, {
   polling: true,
 });
@@ -49,6 +48,14 @@ bot.on("successful_payment", async (msg) => {
   await succesfulPay(msg, bot);
 });
 
+// TODO а тут ты уже запускаешь крон нормально
+// Например, cron.schedule("59 23 * * *", validateSubscriptions)
+// Например, cron.schedule("59 23 * * *", renewLimits)
+// Или const setupCron = () => {
+//  cron.schedule("59 23 * * *", validateSubscriptions)
+//  cron.schedule("59 23 * * *", renewLimits)
+// }
+// вот так в index setupCron()
+//
 validateSubscriptions();
 renewLimits();
-

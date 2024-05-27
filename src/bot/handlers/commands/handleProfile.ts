@@ -21,6 +21,7 @@ export const handleProfile = async (args: HadnlerArgs) => {
       chat_id: user.chat_id,
     },
   });
+
   const subscription = await prisma.subscriptions.findFirst({
     where: {
       id: userSubscription?.subscription_id!,
@@ -50,6 +51,7 @@ export const handleProfile = async (args: HadnlerArgs) => {
     },
     where: { subscription_id: subscription?.id as number },
   });
+
   const requestsCount = await prisma.requests.findMany({
     select: {
       Models: {
@@ -73,13 +75,11 @@ export const handleProfile = async (args: HadnlerArgs) => {
 
   const countLimits = (item: Limits) => {
     //@ts-ignore
-
-    //@ts-ignore
     return item.limits! + item.Models.ReferralBonuses[0].count! * referals;
   };
 
-  let tommorowDate = new Date()
-  tommorowDate.setDate(tommorowDate.getDate()+1)
+  let tommorowDate = new Date();
+  tommorowDate.setDate(tommorowDate.getDate() + 1);
   //@ts-ignore
   const limitsText = subLimits.map((item) => `🟢${item.Models?.name}: ${formatRequestCount[item.Models!.name as string]}/${countLimits(item)}`).join("\n");
   const messageText =
