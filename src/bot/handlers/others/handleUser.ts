@@ -19,8 +19,6 @@ export const handleUser = async (message: Message) => {
         referral_link: generateRefLink(message.chat.id),
       },
     });
-
-    /* TODO дату окончания сделать валидной и равной пару лет например */
     await prisma.user_subscriptions.create({
       data: {
         chat_id: String(message.chat.id),

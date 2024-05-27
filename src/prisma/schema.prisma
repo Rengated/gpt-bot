@@ -72,6 +72,7 @@ model Subscriptions {
   id                 Int                  @id @default(autoincrement())
   name               String?
   price              Int?
+  duration_sub       Int?
   Limits             Limits[]
   User_subscriptions User_subscriptions[]
   Transactions       Transactions[]
@@ -83,7 +84,7 @@ model Transactions {
   createdAt        DateTime?     @db.Date
   status           String?
   subscriptions_id Int
-  duration         DateTime?
+  duration         Int?          @default(10000)
   Users            Users?        @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
   Subscriptions    Subscriptions @relation(fields: [subscriptions_id], references: [id])
 }

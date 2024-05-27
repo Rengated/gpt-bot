@@ -47,15 +47,12 @@ export const handleCallback = async (args: CallbackArgs) => {
         id: Number(ctx.data!),
       },
     });
-
-    const duration = new Date();
-    duration.setMonth(duration.getMonth() + 1);
-    duration.toISOString();
+    let duration = subscription?.duration_sub
+    console.log(duration)
 
     const transaction = await prisma.transactions.create({
       data: {
         createdAt: new Date(),
-        duration,
         chat_id: user?.chat_id,
         status: "inProcess",
         subscriptions_id: subscription!.id,

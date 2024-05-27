@@ -1,6 +1,5 @@
 import { Limits, PrismaClient } from "@prisma/client";
 import { HadnlerArgs } from "../../../types/HandlerArgs";
-import { it } from "node:test";
 
 export const handleProfile = async (args: HadnlerArgs) => {
   const prisma = new PrismaClient();
