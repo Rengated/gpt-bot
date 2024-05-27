@@ -26,10 +26,9 @@ export const handleUser = async (message: Message) => {
         chat_id: String(message.chat.id),
         subscription_id: 1,
         dateStart: new Date(),
-        dateEnd: new Date(),
+        dateEnd: new Date(2030, 1, 19),
       },
     });
-
     const models = await prisma.models.findMany();
     await prisma.requests.createMany({
       data: [

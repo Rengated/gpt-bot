@@ -27,6 +27,7 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
     },
     data: {
       subscription_id: transaction?.subscriptions_id,
+      dateEnd: String(Date.now())
     },
   });
 
