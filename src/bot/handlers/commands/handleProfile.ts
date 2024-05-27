@@ -78,16 +78,18 @@ export const handleProfile = async (args: HadnlerArgs) => {
     return item.limits! + item.Models.ReferralBonuses[0].count! * referals;
   };
 
-  /* TODO добавить длительность подписки и дату обновления лимитов */
-
+  let tommorowDate = new Date()
+  tommorowDate.setDate(tommorowDate.getDate()+1)
   //@ts-ignore
   const limitsText = subLimits.map((item) => `🟢${item.Models?.name}: ${formatRequestCount[item.Models!.name as string]}/${countLimits(item)}`).join("\n");
   const messageText =
     `Ваша подписка: ${subscription?.name}` +
+    `\nДата окончания подписки: ${userSubscription?.dateEnd!.toLocaleDateString()}` +
     `\nКоличество ваших рефералов: ${referals}` +
     `\nЦена подписки: ${subscription?.price}р` +
     `\nТекущая модель ${currentModel?.name}` +
-    `\nОсталось :\n${limitsText}`;
+    `\nОсталось :\n${limitsText}` +
+    `\nОбновление лимитов : ${tommorowDate.toLocaleDateString()}`;
 
   await bot.sendMessage(message.chat.id, messageText);
 };
