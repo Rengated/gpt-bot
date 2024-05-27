@@ -14,10 +14,12 @@
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "md5": "^2.3.0",
+    "node-cron": "^3.0.0",
     "node-telegram-bot-api": "^0.65.1"
   },
   "devDependencies": {
     "@types/node": "^20.12.11",
+    "@types/node-cron": "^3.0.11",
     "@types/node-telegram-bot-api": "^0.64.6",
     "prisma": "^5.14.0",
     "tsx": "^4.11.0",
