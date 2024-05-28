@@ -22,8 +22,6 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
   });
   let dataEnd = new Date();
   dataEnd.setDate(dataEnd.getDate() + subscription?.duration_sub!);
-  // TODO dataEnd.toIsoString кто вызовет:?
-  dataEnd.toISOString;
   //обновление подписки
   await prisma.user_subscriptions.updateMany({
     where: {

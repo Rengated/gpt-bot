@@ -1,9 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import cron from "node-cron";
 
-export const validateSubscriptions = () => {
-  // TODO внутри функции не запуск крона, сам каллбек который ты в крон передаешь
-  cron.schedule("59 23 * * *", async function () {
+export const validateSubscriptions = async () => {
     const prisma = new PrismaClient();
     let userSubs = await prisma.user_subscriptions.findMany();
     const userSub = userSubs.map(async (usersbs) => {
@@ -23,5 +20,4 @@ export const validateSubscriptions = () => {
       }
     });
     await prisma.$disconnect();
-  });
 };

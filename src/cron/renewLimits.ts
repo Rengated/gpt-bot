@@ -1,9 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import cron from "node-cron";
 
-export const renewLimits = () => {
-  // TODO внутри функции не запуск крона, сам каллбек который ты в крон передаешь
-  cron.schedule("59 23 * * *", async function () {
+export const renewLimits = async () => {
     const prisma = new PrismaClient();
     let userCount = await prisma.requests.findMany();
     console.log(userCount);
@@ -18,7 +15,4 @@ export const renewLimits = () => {
       });
     });
     await prisma.$disconnect();
-  });
 };
-
-// TODO крон модуль должен быть на уровне модуля бота, а не внутри него

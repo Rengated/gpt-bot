@@ -1,7 +1,5 @@
 import TelegramBot from "node-telegram-bot-api";
 import { commands } from "./bot/config/config.js";
-import { validateSubscriptions } from "./bot/cron/validateSubscriptions.js";
-import { renewLimits } from "./bot/cron/renewLimits.js";
 import { handleUser, handleQuestion } from "./bot/handlers/others/index.js";
 import { handleStart, handleMode, handleProfile, handlePay } from "./bot/handlers/commands/index.js";
 import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
@@ -9,6 +7,7 @@ import { handleRefLink } from "./bot/handlers/commands/handleRefLink.js";
 import { succesfulPay } from "./bot/handlers/callbacks/payments/succesfulPay.js";
 import { preCheckout } from "./bot/handlers/callbacks/payments/preCheckOut.js";
 import "dotenv/config";
+import { setupCron } from "./cron/setupCron.js";
 
 const bot = new TelegramBot(process.env.BOT_KEY!, {
   polling: true,
@@ -48,14 +47,4 @@ bot.on("successful_payment", async (msg) => {
   await succesfulPay(msg, bot);
 });
 
-// TODO а тут ты уже запускаешь крон нормально
-// Например, cron.schedule("59 23 * * *", validateSubscriptions)
-// Например, cron.schedule("59 23 * * *", renewLimits)
-// Или const setupCron = () => {
-//  cron.schedule("59 23 * * *", validateSubscriptions)
-//  cron.schedule("59 23 * * *", renewLimits)
-// }
-// вот так в index setupCron()
-//
-validateSubscriptions();
-renewLimits();
+setupCron()
