@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { HadnlerArgs } from "../../../types/HandlerArgs";
+import { HandlerArgs } from "../../../types/HandlerArgs";
 
-export const handlePay = async (args: HadnlerArgs) => {
+export const handlePay = async (args: HandlerArgs) => {
   const prisma = new PrismaClient();
   const { bot, user, message } = args;
   const subscribtion = await prisma.subscriptions.findMany({

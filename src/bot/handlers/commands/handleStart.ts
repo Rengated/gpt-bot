@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { HadnlerArgs } from "../../../types/HandlerArgs.js";
+import { HandlerArgs } from "../../../types/HandlerArgs.js";
 
-export const handleStart = async (args: HadnlerArgs) => {
+export const handleStart = async (args: HandlerArgs) => {
   const prisma = new PrismaClient();
   const { bot, user, message } = args;
   const [_, refLink] = message.text!.split(" ");

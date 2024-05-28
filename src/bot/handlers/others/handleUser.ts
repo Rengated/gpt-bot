@@ -27,6 +27,7 @@ export const handleUser = async (message: Message) => {
         dateEnd: new Date(2030, 1, 19),
       },
     });
+
     const models = await prisma.models.findMany();
     await prisma.requests.createMany({
       data: [

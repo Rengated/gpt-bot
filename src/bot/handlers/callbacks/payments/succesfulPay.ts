@@ -22,7 +22,7 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
   });
   let dataEnd = new Date();
   dataEnd.setDate(dataEnd.getDate() + subscription?.duration_sub!);
-  //обновление подписки
+
   await prisma.user_subscriptions.updateMany({
     where: {
       chat_id: transaction?.chat_id,
@@ -33,8 +33,6 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
       dateEnd: dataEnd,
     },
   });
-
-  // обновление статуса транзакции и даты подписки
 
   await prisma.transactions.updateMany({
     where: {
@@ -51,5 +49,5 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
     console.log("error", error);
   }
   console.log("Платёж успешно завершён:", msg);
-  ~(await bot.sendMessage(msg.chat.id, `Спасибо за платеж! \nВы купили ${subscription?.name} подписку`));
+  await bot.sendMessage(msg.chat.id, `Спасибо за платеж! \nВы купили ${subscription?.name} подписку`);
 };

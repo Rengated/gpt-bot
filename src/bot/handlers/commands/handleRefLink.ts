@@ -1,6 +1,6 @@
-import { HadnlerArgs } from "../../../types/HandlerArgs.js";
+import { HandlerArgs } from "../../../types/HandlerArgs.js";
 
-export const handleRefLink = async (args: HadnlerArgs) => {
+export const handleRefLink = async (args: HandlerArgs) => {
   const { bot, message, user } = args;
   let botname = (await bot.getMe()).username;
   const text = `Твоя реферальная ссылка <a href='https://t.me/${botname}?start=${user.referral_link}'>https://t.me/${botname}?start=${user.referral_link}</a>`;

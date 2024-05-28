@@ -12,6 +12,7 @@ export const handleCallback = async (args: CallbackArgs) => {
   const prisma = new PrismaClient();
   const { bot, user, ctx } = args;
   const chat_id = String(ctx.message?.chat.id);
+
   if (ctx.data == "close") {
     await bot.deleteMessage(ctx.message!.chat.id, ctx.message!.message_id);
     return;
@@ -47,8 +48,8 @@ export const handleCallback = async (args: CallbackArgs) => {
         id: Number(ctx.data!),
       },
     });
-    let duration = subscription?.duration_sub
-    console.log(duration)
+    let duration = subscription?.duration_sub;
+    console.log(duration);
 
     const transaction = await prisma.transactions.create({
       data: {
@@ -78,6 +79,6 @@ export const handleCallback = async (args: CallbackArgs) => {
       return;
     }
 
-    bot.sendMessage(ctx.message!.chat.id, `У вас уже установлена ${subscription?.name} подписка`);
+    await bot.sendMessage(ctx.message!.chat.id, `У вас уже установлена ${subscription?.name} подписка`);
   }
 };

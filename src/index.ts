@@ -5,9 +5,9 @@ import { handleStart, handleMode, handleProfile, handlePay } from "./bot/handler
 import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
 import { handleRefLink } from "./bot/handlers/commands/handleRefLink.js";
 import { succesfulPay } from "./bot/handlers/callbacks/payments/succesfulPay.js";
-import { preCheckout } from "./bot/handlers/callbacks/payments/preCheckOut.js";
-import "dotenv/config";
+import { preCheckout } from "./bot/handlers/callbacks/payments/preCheckout.js";
 import { setupCron } from "./cron/setupCron.js";
+import "dotenv/config";
 
 const bot = new TelegramBot(process.env.BOT_KEY!, {
   polling: true,
@@ -47,4 +47,4 @@ bot.on("successful_payment", async (msg) => {
   await succesfulPay(msg, bot);
 });
 
-setupCron()
+setupCron();

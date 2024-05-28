@@ -1,7 +1,7 @@
 import { Limits, PrismaClient } from "@prisma/client";
-import { HadnlerArgs } from "../../../types/HandlerArgs";
+import { HandlerArgs } from "../../../types/HandlerArgs";
 
-export const handleProfile = async (args: HadnlerArgs) => {
+export const handleProfile = async (args: HandlerArgs) => {
   const prisma = new PrismaClient();
   const { bot, message, user } = args;
 
