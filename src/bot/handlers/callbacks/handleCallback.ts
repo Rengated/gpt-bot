@@ -1,5 +1,5 @@
 import { Users } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../../prisma/index.js";
 import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
 import "dotenv/config";
 
@@ -9,7 +9,6 @@ interface CallbackArgs {
   user: Users;
 }
 export const handleCallback = async (args: CallbackArgs) => {
-  const prisma = new PrismaClient();
   const { bot, user, ctx } = args;
   const chat_id = String(ctx.message?.chat.id);
 

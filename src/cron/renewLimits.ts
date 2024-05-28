@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../prisma/index.js";
 
 export const renewLimits = async () => {
-  const prisma = new PrismaClient();
   let userCount = await prisma.requests.findMany();
   console.log(userCount);
   const count = userCount.map(async (user) => {

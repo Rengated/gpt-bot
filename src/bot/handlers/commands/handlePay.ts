@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { HandlerArgs } from "../../../types/HandlerArgs";
+import prisma from "../../../prisma/index.js";
 
 export const handlePay = async (args: HandlerArgs) => {
-  const prisma = new PrismaClient();
   const { bot, user, message } = args;
   const subscribtion = await prisma.subscriptions.findMany({
     where: {

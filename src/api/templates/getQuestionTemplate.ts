@@ -1,7 +1,7 @@
 import { PrismaClient, Users } from "@prisma/client";
+import prisma from "../../prisma/index.js";
 
 export const getQuestionTemplate = async (message: string, model: string, user: Users) => {
-  const prisma = new PrismaClient();
   let messages =
     (await prisma.messages.findMany({
       where: {

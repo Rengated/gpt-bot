@@ -1,9 +1,8 @@
-import { PrismaClient, Users } from "@prisma/client";
+import { Users } from "@prisma/client";
+import prisma from "../../../../prisma/index.js";
 
 export const reqeustAvailable = async (user: Users) => {
   let bonus = 0;
-
-  const prisma = new PrismaClient();
 
   const referals = (
     await prisma.referrals.aggregate({

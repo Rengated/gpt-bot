@@ -4,9 +4,9 @@ import { HandlerArgs } from "../../../types/HandlerArgs.js";
 import { reqeustAvailable } from "./helpers/reqeustAvailable.js";
 import { successCalback } from "./helpers/successCallback.js";
 import { getImage } from "../../../api/answer/getImage.js";
+import prisma from "../../../prisma/index.js";
 
 export const handleQuestion = async (args: HandlerArgs) => {
-  const prisma = new PrismaClient();
   const { bot, user, message } = args;
   const messageWait = await bot.sendMessage(message.chat.id, "Бот генерирует ответ...");
 

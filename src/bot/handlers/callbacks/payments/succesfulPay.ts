@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import TelegramBot from "node-telegram-bot-api";
+import prisma from "../../../../prisma/index.js";
 
 export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) => {
-  const prisma = new PrismaClient();
   const transationId = Number(msg.successful_payment?.invoice_payload);
   const transaction = await prisma.transactions.findFirst({
     where: {

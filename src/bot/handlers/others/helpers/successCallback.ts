@@ -1,8 +1,7 @@
-import { PrismaClient, Users } from "@prisma/client";
+import { Users } from "@prisma/client";
+import prisma from "../../../../prisma/index.js";
 
 export const successCalback = async (user: Users, message?: string) => {
-  const prisma = new PrismaClient();
-
   if (message) {
     await prisma.messages.create({
       data: {

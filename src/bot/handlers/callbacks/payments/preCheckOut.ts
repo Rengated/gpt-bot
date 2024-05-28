@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import TelegramBot, { PreCheckoutQuery } from "node-telegram-bot-api";
+import prisma from "../../../../prisma/index.js";
 
 export const preCheckout = async (query: PreCheckoutQuery, bot: TelegramBot) => {
-  const prisma = new PrismaClient();
   console.log("Пре-чекаут запрос:", query);
   await bot
     .answerPreCheckoutQuery(query.id, true)
