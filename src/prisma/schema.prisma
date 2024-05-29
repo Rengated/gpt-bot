@@ -8,25 +8,25 @@ datasource db {
 }
 
 model Users {
-  id                 Int                  @id @default(autoincrement())
-  chat_id            String               @unique
-  model_id           Int?
-  referral_link      String?
-  Messages           Messages[]
-  Referrals          Referrals[]
-  Requests           Requests[]
-  Transactions       Transactions[]
-  User_subscriptions User_subscriptions[]
+  id                Int                @id @default(autoincrement())
+  chat_id           String             @unique
+  model_id          Int?
+  referral_link     String?
+  Messages          Messages[]
+  Referrals         Referrals[]
+  Requests          Requests[]
+  Transactions      Transactions[]
+  UserLimits        UserLimits[]
+  UserSubscriptions UserSubscriptions?
 }
 
-model Limits {
-  model_id        Int
+model SubscriptionLimits {
+  id              Int           @id @default(autoincrement())
   subscription_id Int
-  limits          Int?
-  Models          Models        @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Subscriptions   Subscriptions @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([model_id, subscription_id])
+  model_id        Int
+  count           Int
+  Models          Models        @relation(fields: [model_id], references: [id])
+  Subscriptions   Subscriptions @relation(fields: [subscription_id], references: [id])
 }
 
 model Messages {
@@ -37,12 +37,13 @@ model Messages {
 }
 
 model Models {
-  id              Int               @id @default(autoincrement())
-  name            String?
-  family          String            @default("chat")
-  Limits          Limits[]
-  ReferralBonuses ReferralBonuses[]
-  Requests        Requests[]
+  id                 Int                  @id @default(autoincrement())
+  name               String?
+  family             String               @default("chat")
+  ReferralBonuses    ReferralBonuses[]
+  Requests           Requests[]
+  UserLimits         UserLimits[]
+  SubscriptionLimits SubscriptionLimits[]
 }
 
 model ReferralBonuses {
@@ -59,23 +60,14 @@ model Referrals {
   Users       Users  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model Requests {
-  id       Int     @id @default(autoincrement())
-  chat_id  String?
-  count    Int?
-  model_id Int?
-  Users    Users?  @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
-  Models   Models? @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
 model Subscriptions {
   id                 Int                  @id @default(autoincrement())
   name               String?
   price              Int?
-  duration_sub       Int?
-  Limits             Limits[]
-  User_subscriptions User_subscriptions[]
+  duration           Int?
   Transactions       Transactions[]
+  SubscriptionLimits SubscriptionLimits[]
+  UserSubscriptions  UserSubscriptions[]
 }
 
 model Transactions {
@@ -89,7 +81,17 @@ model Transactions {
   Subscriptions    Subscriptions @relation(fields: [subscriptions_id], references: [id])
 }
 
-model User_subscriptions {
+model UserLimits {
+  id       Int    @id @default(autoincrement())
+  model_id Int
+  chat_id  String
+  request  Int
+  limit    Int
+  Users    Users  @relation(fields: [chat_id], references: [chat_id])
+  Models   Models @relation(fields: [model_id], references: [id])
+}
+
+model UserSubscriptions {
   id              Int            @id @default(autoincrement())
   chat_id         String?        @unique
   subscription_id Int?
