@@ -10,29 +10,31 @@ export const handleStart = async (args: HandlerArgs) => {
     return;
   }
 
+  // Пользователь который пригласил реферала
   const offeringUser = await prisma.users.findFirst({
     where: {
       referral_link: refLink,
     },
   });
 
-  if (!offeringUser) {
+  if (!offeringUser || offeringUser?.chat_id == user.chat_id) {
     return;
   }
 
-  const exists = !!(await prisma.referrals.findFirst({
+  const alreadyExists = !!(await prisma.referrals.findFirst({
     where: {
       AND: [{ chat_id: offeringUser!.chat_id }, { referral_id: user.chat_id }],
     },
   }));
 
+  //Если приглащающий реферал для этого юзера
   const offeringUserIsReferal = !!(await prisma.referrals.findFirst({
     where: {
       AND: [{ chat_id: user!.chat_id }, { referral_id: offeringUser.chat_id }],
     },
   }));
 
-  if (exists || offeringUserIsReferal) {
+  if (alreadyExists || offeringUserIsReferal) {
     return;
   }
 

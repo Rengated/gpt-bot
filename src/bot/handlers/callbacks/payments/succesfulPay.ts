@@ -20,9 +20,9 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
     },
   });
   let dataEnd = new Date();
-  dataEnd.setDate(dataEnd.getDate() + subscription?.duration_sub!);
+  dataEnd.setDate(dataEnd.getDate() + subscription?.duration!);
 
-  await prisma.user_subscriptions.updateMany({
+  await prisma.userSubscriptions.updateMany({
     where: {
       chat_id: transaction?.chat_id,
     },
@@ -39,7 +39,7 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
     },
     data: {
       status: "succesful",
-      duration: subscription?.duration_sub,
+      duration: subscription?.duration,
     },
   });
   try {

@@ -17,6 +17,7 @@ export const handleUser = async (message: Message) => {
         referral_link: generateRefLink(message.chat.id),
       },
     });
+
     await prisma.userSubscriptions.create({
       data: {
         chat_id: String(message.chat.id),

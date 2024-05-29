@@ -33,10 +33,10 @@ export const successCalback = async (user: Users, message?: string) => {
     }
   }
 
-  await prisma.requests.updateMany({
+  await prisma.userLimits.updateMany({
     where: { AND: [{ chat_id: user.chat_id }, { model_id: user.model_id as number }] },
     data: {
-      count: {
+      requests: {
         increment: 1,
       },
     },

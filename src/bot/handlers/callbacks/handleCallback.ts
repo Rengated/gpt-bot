@@ -38,7 +38,7 @@ export const handleCallback = async (args: CallbackArgs) => {
       },
       select: {
         chat_id: true,
-        User_subscriptions: true,
+        UserSubscriptions: true,
       },
     });
 
@@ -47,7 +47,7 @@ export const handleCallback = async (args: CallbackArgs) => {
         id: Number(ctx.data!),
       },
     });
-    let duration = subscription?.duration_sub;
+    let duration = subscription?.duration;
     console.log(duration);
 
     const transaction = await prisma.transactions.create({
@@ -59,11 +59,12 @@ export const handleCallback = async (args: CallbackArgs) => {
       },
     });
 
-    if (subscription?.id !== user?.User_subscriptions[0].subscription_id) {
+    //@ts-ignore
+    if (subscription?.id !== user?.UserSubscriptions[0].subscription_id) {
       const price = Math.round(subscription?.price! * 100);
 
       const invoice = {
-        title: `Покупка подписки ${subscription?.name}⚡️`,
+        title: `Покупка подписки ${subscription?.name}`,
         description: `Стоимость подписки: ${(price! / 100).toFixed(2)} RUB`,
         stripeToken: process.env.STRIPE_TOKEN,
         payload: String(transaction.id),

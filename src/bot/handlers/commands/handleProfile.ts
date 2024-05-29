@@ -1,4 +1,4 @@
-import { Limits } from "@prisma/client";
+import { UserLimits } from "@prisma/client";
 import { HandlerArgs } from "../../../types/HandlerArgs";
 import prisma from "../../../prisma/index.js";
 
@@ -16,15 +16,12 @@ export const handleProfile = async (args: HandlerArgs) => {
     })
   )._count.id;
 
-  const userSubscription = await prisma.user_subscriptions.findFirst({
+  const userSubscription = await prisma.userSubscriptions.findFirst({
+    include: {
+      Subscriptions: true,
+    },
     where: {
       chat_id: user.chat_id,
-    },
-  });
-
-  const subscription = await prisma.subscriptions.findFirst({
-    where: {
-      id: userSubscription?.subscription_id!,
     },
   });
 
@@ -34,59 +31,34 @@ export const handleProfile = async (args: HandlerArgs) => {
     },
   });
 
-  const subLimits = await prisma.limits.findMany({
-    select: {
+  const userLimits = await prisma.userLimits.findMany({
+    include: {
       Models: {
-        select: {
-          ReferralBonuses: {
-            select: {
-              count: true,
-            },
-          },
-          name: true,
+        include: {
+          ReferralBonuses: true,
         },
       },
-      Subscriptions: true,
-      limits: true,
-    },
-    where: { subscription_id: subscription?.id as number },
-  });
-
-  const requestsCount = await prisma.requests.findMany({
-    select: {
-      Models: {
-        select: {
-          name: true,
-        },
-      },
-      count: true,
     },
     where: {
       chat_id: user.chat_id,
     },
   });
 
-  const formatRequestCount = Object.assign(
+  const countLimits = (item: UserLimits) => {
     //@ts-ignore
-    ...requestsCount.map((item) => ({
-      [item.Models?.name as string]: item.count,
-    }))
-  );
-
-  const countLimits = (item: Limits) => {
-    //@ts-ignore
-    return item.limits! + item.Models.ReferralBonuses[0].count! * referals;
+    return item.limit! + item.Models.ReferralBonuses[0].count! * referals;
   };
 
   let tommorowDate = new Date();
   tommorowDate.setDate(tommorowDate.getDate() + 1);
+
   //@ts-ignore
-  const limitsText = subLimits.map((item) => `🟢${item.Models?.name}: ${formatRequestCount[item.Models!.name as string]}/${countLimits(item)}`).join("\n");
+  const limitsText = userLimits.map((item: UserLimits) => `🟢${item.Models?.name}: ${item.requests}/${countLimits(item)}`).join("\n");
   const messageText =
-    `Ваша подписка: ${subscription?.name}` +
+    `Ваша подписка: ${userSubscription?.Subscriptions?.name}` +
     `\nДата окончания подписки: ${userSubscription?.dateEnd!.toLocaleDateString()}` +
     `\nКоличество ваших рефералов: ${referals}` +
-    `\nЦена подписки: ${subscription?.price}р` +
+    `\nЦена подписки: ${userSubscription?.Subscriptions?.price}р` +
     `\nТекущая модель ${currentModel?.name}` +
     `\nОсталось :\n${limitsText}` +
     `\nОбновление лимитов : ${tommorowDate.toLocaleDateString()}`;
