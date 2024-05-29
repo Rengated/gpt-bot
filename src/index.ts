@@ -1,7 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import { commands } from "./bot/config/config.js";
 import { handleUser, handleQuestion } from "./bot/handlers/others/index.js";
-import { handleStart, handleMode, handleProfile, handlePay } from "./bot/handlers/commands/index.js";
+import { handleStart, handleMode, handleProfile, handlePay, handleHelp, handleReset } from "./bot/handlers/commands/index.js";
 import { handleCallback } from "./bot/handlers/callbacks/handleCallback.js";
 import { handleRefLink } from "./bot/handlers/commands/handleRefLink.js";
 import { succesfulPay } from "./bot/handlers/callbacks/payments/succesfulPay.js";
@@ -21,6 +21,8 @@ const commandsHandlers: { [key: string]: any } = {
   mode: handleMode,
   pay: handlePay,
   mylink: handleRefLink,
+  reset: handleReset,
+  help: handleHelp,
 };
 
 bot.on("text", async (message) => {
