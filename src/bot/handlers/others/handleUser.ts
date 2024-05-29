@@ -1,8 +1,6 @@
 import { Message } from "node-telegram-bot-api";
-import { PrismaClient, Users } from "@prisma/client";
 import { generateRefLink } from "./helpers/generateRefLink.js";
-
-const prisma = new PrismaClient();
+import prisma from "../../../prisma/index.js";
 
 export const handleUser = async (message: Message) => {
   let user = await prisma.users.findFirst({

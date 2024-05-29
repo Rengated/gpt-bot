@@ -1,9 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../prisma/index.js";
 
 export const validateSubscriptions = async () => {
-  const prisma = new PrismaClient();
   let userSubs = await prisma.user_subscriptions.findMany();
-  const userSub = userSubs.map(async (usersbs) => {
+  userSubs.map(async (usersbs) => {
     let currentlyDate = new Date();
     let diff = usersbs.dateEnd!.getTime() - currentlyDate.getTime();
     if (diff <= 0) {

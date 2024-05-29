@@ -1,8 +1,8 @@
-import { Limits, PrismaClient } from "@prisma/client";
+import { Limits } from "@prisma/client";
 import { HandlerArgs } from "../../../types/HandlerArgs";
+import prisma from "../../../prisma/index.js";
 
 export const handleProfile = async (args: HandlerArgs) => {
-  const prisma = new PrismaClient();
   const { bot, message, user } = args;
 
   const referals = (
