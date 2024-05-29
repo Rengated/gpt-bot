@@ -15,9 +15,16 @@ export const commands = [
     command: "pay",
     description: "Подписки и оплата",
   },
-
   {
     command: "mylink",
     description: "Моя реферальная ссылка",
+  },
+  {
+    command: "reset",
+    description: "Сброс контекста",
+  },
+  {
+    command: "help",
+    description: "Помощь",
   },
 ];
