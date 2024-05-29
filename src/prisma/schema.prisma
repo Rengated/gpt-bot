@@ -8,13 +8,13 @@ datasource db {
 }
 
 model Users {
-  id                Int                @id @default(autoincrement())
-  chat_id           String             @unique
-  model_id          Int?
-  referral_link     String?
-  Messages          Messages[]
-  Referrals         Referrals[]
-  Requests          Requests[]
+  id            Int         @id @default(autoincrement())
+  chat_id       String      @unique
+  model_id      Int?
+  referral_link String?
+  Messages      Messages[]
+  Referrals     Referrals[]
+
   Transactions      Transactions[]
   UserLimits        UserLimits[]
   UserSubscriptions UserSubscriptions?
@@ -41,7 +41,6 @@ model Models {
   name               String?
   family             String               @default("chat")
   ReferralBonuses    ReferralBonuses[]
-  Requests           Requests[]
   UserLimits         UserLimits[]
   SubscriptionLimits SubscriptionLimits[]
 }
