@@ -84,7 +84,7 @@ model UserLimits {
   id       Int    @id @default(autoincrement())
   model_id Int
   chat_id  String
-  request  Int
+  requests Int
   limit    Int
   Users    Users  @relation(fields: [chat_id], references: [chat_id])
   Models   Models @relation(fields: [model_id], references: [id])
