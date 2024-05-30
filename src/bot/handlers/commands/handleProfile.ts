@@ -41,6 +41,9 @@ export const handleProfile = async (args: HandlerArgs) => {
     },
     where: {
       chat_id: user.chat_id,
+      limit: {
+        gt: 0,
+      },
     },
   });
 
