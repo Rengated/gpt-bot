@@ -4,15 +4,16 @@ import prisma from "../../../prisma/index.js";
 export const handleMode = async (args: HandlerArgs) => {
   const { bot, message, user } = args;
 
-  let currentSub = await prisma.userSubscriptions.findFirst({
+  let modelsInSub = await prisma.userLimits.findMany({
     where: {
-      chat_id: user.chat_id,
-    },
-  });
-
-  let modelsInSub = await prisma.subscriptionLimits.findMany({
-    where: {
-      subscription_id: currentSub?.subscription_id!,
+      AND: [
+        { chat_id: user.chat_id },
+        {
+          limit: {
+            gt: 0,
+          },
+        },
+      ],
     },
     include: {
       Models: true,

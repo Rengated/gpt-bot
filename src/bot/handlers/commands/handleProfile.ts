@@ -47,16 +47,11 @@ export const handleProfile = async (args: HandlerArgs) => {
     },
   });
 
-  const countLimits = (item: UserLimits) => {
-    //@ts-ignore
-    return item.limit! + item.Models.ReferralBonuses[0].count! * referals;
-  };
-
   let tommorowDate = new Date();
   tommorowDate.setDate(tommorowDate.getDate() + 1);
 
   //@ts-ignore
-  const limitsText = userLimits.map((item: UserLimits) => `🟢${item.Models?.name}: ${item.requests}/${countLimits(item)}`).join("\n");
+  const limitsText = userLimits.map((item: UserLimits) => `🟢${item.Models?.name}: ${item.requests}/${item.limit}`).join("\n");
   const messageText =
     `Ваша подписка: ${userSubscription?.Subscriptions?.name}` +
     `\nДата окончания подписки: ${userSubscription?.dateEnd!.toLocaleDateString()}` +
