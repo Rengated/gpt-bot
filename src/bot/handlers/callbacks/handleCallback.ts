@@ -32,7 +32,7 @@ export const handleCallback = async (args: CallbackArgs) => {
   }
 
   if (ctx.message?.text === "Выберите подписку") {
-    const user = await prisma.users.findUnique({
+    const user = await prisma.users.findFirst({
       where: {
         chat_id: chat_id,
       },
@@ -47,8 +47,6 @@ export const handleCallback = async (args: CallbackArgs) => {
         id: Number(ctx.data!),
       },
     });
-    let duration = subscription?.duration;
-    console.log(duration);
 
     const transaction = await prisma.transactions.create({
       data: {
@@ -60,7 +58,7 @@ export const handleCallback = async (args: CallbackArgs) => {
     });
 
     //@ts-ignore
-    if (subscription?.id !== user?.UserSubscriptions[0].subscription_id) {
+    if (subscription?.id !== user?.UserSubscriptions.subscription_id) {
       const price = Math.round(subscription?.price! * 100);
 
       const invoice = {
