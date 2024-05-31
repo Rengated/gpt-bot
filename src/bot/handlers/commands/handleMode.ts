@@ -1,5 +1,6 @@
 import { HandlerArgs } from "../../../types/HandlerArgs";
 import prisma from "../../../prisma/index.js";
+import { Models } from "@prisma/client";
 
 export const handleMode = async (args: HandlerArgs) => {
   const { bot, message, user } = args;
@@ -33,13 +34,14 @@ export const handleMode = async (args: HandlerArgs) => {
   const formattedModdelsInReferalLimits = modelsInReferalLimits.map((model) => model.Models);
 
   const mergedArray = [...formattedModdelsInReferalLimits, ...formattedModdelsInUserLimits];
-  var mergedModels = [];
+  var mergedModels: Models[] = [];
 
   for (const model of mergedArray) {
-    if (!mergedArray.some((item) => item.name === model.name)) {
+    if (mergedModels.findIndex((item) => item.name === model.name) === -1) {
       mergedModels.push(model);
     }
   }
+
   await bot.sendMessage(message.chat.id, "Выберите модель", {
     reply_markup: {
       //@ts-ignore

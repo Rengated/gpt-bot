@@ -33,6 +33,27 @@ export const successCalback = async (user: Users, message?: string) => {
     }
   }
 
+  const userLimits = await prisma.userLimits.findFirst({
+    where: {
+      model_id: user.model_id!,
+      chat_id: user.chat_id,
+    },
+  });
+
+  if (userLimits?.requests == userLimits?.limit) {
+    await prisma.referralLimits.updateMany({
+      where: {
+        AND: [{ chat_id: user.chat_id }, { model_id: user.model_id! }],
+      },
+      data: [
+        {
+          count: {
+            decrement: 1,
+          },
+        },
+      ],
+    });
+  }
   await prisma.userLimits.updateMany({
     where: { AND: [{ chat_id: user.chat_id }, { model_id: user.model_id as number }] },
     data: {

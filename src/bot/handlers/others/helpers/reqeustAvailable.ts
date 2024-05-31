@@ -9,5 +9,9 @@ export const reqeustAvailable = async (user: Users) => {
     },
   });
 
-  return userLimits?.requests! < userLimits?.limit!;
+  const referralLimits = await prisma.referralLimits.findFirst({
+    where: { model_id: user.model_id!, chat_id: user.chat_id },
+  });
+
+  return userLimits?.requests! < userLimits?.limit! || referralLimits?.count;
 };

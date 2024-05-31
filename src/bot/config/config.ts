@@ -27,4 +27,8 @@ export const commands = [
     command: "help",
     description: "Помощь",
   },
+  {
+    command: "bonuses",
+    description: "Ваши реферальные бонусы",
+  },
 ];
