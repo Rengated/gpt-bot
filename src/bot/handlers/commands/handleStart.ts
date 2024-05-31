@@ -51,32 +51,12 @@ export const handleStart = async (args: HandlerArgs) => {
 
   const bonuses = await prisma.referralBonuses.findMany();
 
-  const limits = Object.assign(
-    {},
-    ...(
-      await prisma.subscriptionLimits.findMany({
-        where: {
-          subscription_id: offeringUser.UserSubscriptions?.subscription_id!,
-        },
-      })
-    ).map((limit: SubscriptionLimits) => ({ [limit.model_id]: limit.count }))
-  );
-
-  const referals = (
-    await prisma.referrals.aggregate({
-      where: {
-        chat_id: offeringUser.chat_id,
-      },
-      _count: {
-        id: true,
-      },
-    })
-  )._count.id;
-
   for (const bonus of bonuses) {
-    await prisma.userLimits.updateMany({
+    await prisma.referralLimits.updateMany({
       data: {
-        limit: (limits[bonus.model_id!] as unknown as number) || 0 + bonus.count! * referals,
+        count: {
+          increment: bonus.count!,
+        },
       },
       where: {
         AND: [{ chat_id: offeringUser.chat_id }, { model_id: bonus.model_id! }],

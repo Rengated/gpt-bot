@@ -2,6 +2,7 @@ import { Message } from "node-telegram-bot-api";
 import { generateRefLink } from "./helpers/generateRefLink.js";
 import prisma from "../../../prisma/index.js";
 import { SubscriptionLimits } from "@prisma/client";
+import { count } from "console";
 
 export const handleUser = async (message: Message) => {
   let user = await prisma.users.findFirst({
@@ -48,6 +49,15 @@ export const handleUser = async (message: Message) => {
           model_id: model.id,
           requests: 0,
           limit: (limits[model.id] as unknown as number) || 0,
+        })),
+      ],
+    });
+
+    await prisma.referralLimits.createMany({
+      data: [
+        ...models.map((model) => ({
+          chat_id: String(user!.chat_id),
+          model_id: model.id,
         })),
       ],
     });

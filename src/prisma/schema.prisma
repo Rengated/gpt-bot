@@ -18,6 +18,7 @@ model Users {
   Transactions      Transactions[]
   UserLimits        UserLimits[]
   UserSubscriptions UserSubscriptions?
+  ReferralLimits    ReferralLimits[]
 }
 
 model SubscriptionLimits {
@@ -43,6 +44,7 @@ model Models {
   ReferralBonuses    ReferralBonuses[]
   UserLimits         UserLimits[]
   SubscriptionLimits SubscriptionLimits[]
+  ReferralLimits     ReferralLimits[]
 }
 
 model ReferralBonuses {
@@ -98,4 +100,13 @@ model UserSubscriptions {
   dateEnd         DateTime?      @db.Date
   Users           Users?         @relation(fields: [chat_id], references: [chat_id], onDelete: NoAction, onUpdate: NoAction)
   Subscriptions   Subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model ReferralLimits {
+  id       Int    @id @default(autoincrement())
+  chat_id  String
+  model_id Int
+  count    Int    @default(0)
+  Models   Models @relation(fields: [model_id], references: [id])
+  Users    Users  @relation(fields: [chat_id], references: [chat_id])
 }
