@@ -53,13 +53,17 @@ export const successCalback = async (user: Users, message?: string) => {
         },
       ],
     });
+    return;
   }
+
   await prisma.userLimits.updateMany({
     where: { AND: [{ chat_id: user.chat_id }, { model_id: user.model_id as number }] },
-    data: {
-      requests: {
-        increment: 1,
+    data: [
+      {
+        requests: {
+          increment: 1,
+        },
       },
-    },
+    ],
   });
 };
