@@ -5,6 +5,7 @@ import { Models } from "@prisma/client";
 export const handleMode = async (args: HandlerArgs) => {
   const { bot, message, user } = args;
 
+//заполняет массив объектами, где лимиты не 0
   let modelsInUserLimits = await prisma.userLimits.findMany({
     where: {
       AND: [
@@ -20,15 +21,22 @@ export const handleMode = async (args: HandlerArgs) => {
       Models: true,
     },
   });
-
   let modelsInReferalLimits = await prisma.referralLimits.findMany({
     where: {
-      chat_id: user.chat_id,
+      AND: [
+        { chat_id: user.chat_id },
+        {
+          count: {
+            gt: 0,
+          },
+        },
+      ],
     },
     include: {
       Models: true,
     },
   });
+
 
   const formattedModdelsInUserLimits = modelsInUserLimits.map((model) => model.Models);
   const formattedModdelsInReferalLimits = modelsInReferalLimits.map((model) => model.Models);

@@ -17,11 +17,11 @@ export const handleProfile = async (args: HandlerArgs) => {
   )._count.id;
 
   const userSubscription = await prisma.userSubscriptions.findFirst({
-    include: {
-      Subscriptions: true,
-    },
     where: {
       chat_id: user.chat_id,
+    },
+    include: {
+      Subscriptions: true,
     },
   });
 
@@ -46,7 +46,6 @@ export const handleProfile = async (args: HandlerArgs) => {
       },
     },
   });
-
   let tommorowDate = new Date();
   tommorowDate.setDate(tommorowDate.getDate() + 1);
 
