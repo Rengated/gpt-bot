@@ -13,6 +13,6 @@ export const handleBonuses = async (args: HandlerArgs) => {
     },
   });
 
-  const textMessage = `Ваши бонусны лимиты` + bonusesLimits.map((limit) => `\nМодель ${limit.Models.name}: ${limit.count}`);
-  await bot.sendMessage(message.chat.id, textMessage);
+  const textMessage = `<b>Ваши бонусные лимиты</b>` + bonusesLimits.map((limit) => `\nМодель ${limit.Models.name}: ${limit.count}`);
+  await bot.sendMessage(message.chat.id, textMessage, { parse_mode: "HTML" });
 };
