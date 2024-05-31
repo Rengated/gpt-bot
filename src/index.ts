@@ -27,7 +27,9 @@ const commandsHandlers: { [key: string]: any } = {
 
 bot.on("text", async (message) => {
   const user = await handleUser(message);
-  if (Object.keys(commandsHandlers).some((key) => message.text?.includes(key))) {
+  const condition = Object.keys(commandsHandlers).some((key) => message.text === `/${key}` || message.text?.split(" ")[0] == "/start");
+
+  if (condition) {
     const handlerKey = Object.keys(commandsHandlers).find((key) => message.text?.includes(key));
     const messageHandler = commandsHandlers[handlerKey as string];
     await messageHandler({ user, message, bot });

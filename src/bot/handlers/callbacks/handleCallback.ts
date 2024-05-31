@@ -57,8 +57,7 @@ export const handleCallback = async (args: CallbackArgs) => {
       },
     });
 
-    //@ts-ignore
-    if (subscription?.id !== user?.UserSubscriptions.subscription_id) {
+    if (subscription?.id !== user?.UserSubscriptions!.subscription_id) {
       const price = Math.round(subscription?.price! * 100);
       const invoice = {
         title: `Покупка подписки ${subscription?.name}`,
