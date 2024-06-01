@@ -75,15 +75,16 @@ export const handleCallback = async (args: CallbackArgs) => {
                 {
                   description: subscription?.name,
                   quantity: 1,
+                  amount: {
+                    value: subscription?.price,
+                    currency: "RUB",
+                    vat_code: "1",
+                  },
                 },
               ],
-              amount: {
-                value: subscription?.price,
-                currency: "RUB",
-                vat_code: "1",
-              },
             },
           }),
+
           need_email: true,
           need_phone_number: true,
         });
