@@ -17,6 +17,21 @@ export const validateSubscriptions = async () => {
           dateEnd: new Date(2030, 1, 19),
         },
       });
+
+      const limits = await prisma.subscriptionLimits.findMany({
+        where: {
+          subscription_id: 1,
+        },
+      });
+
+      for (const limit of limits) {
+        await prisma.userLimits.updateMany({
+          where: { model_id: limit.model_id },
+          data: {
+            limit: limit.count,
+          },
+        });
+      }
     }
   });
 };

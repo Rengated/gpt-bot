@@ -5,7 +5,7 @@ import { Models } from "@prisma/client";
 export const handleMode = async (args: HandlerArgs) => {
   const { bot, message, user } = args;
 
-//заполняет массив объектами, где лимиты не 0
+  //заполняет массив объектами, где лимиты не 0
   let modelsInUserLimits = await prisma.userLimits.findMany({
     where: {
       AND: [
@@ -37,10 +37,8 @@ export const handleMode = async (args: HandlerArgs) => {
     },
   });
 
-
   const formattedModdelsInUserLimits = modelsInUserLimits.map((model) => model.Models);
   const formattedModdelsInReferalLimits = modelsInReferalLimits.map((model) => model.Models);
-
   const mergedArray = [...formattedModdelsInReferalLimits, ...formattedModdelsInUserLimits];
   var mergedModels: Models[] = [];
 
