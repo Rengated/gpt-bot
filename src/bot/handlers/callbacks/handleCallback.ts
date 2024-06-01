@@ -78,15 +78,16 @@ export const handleCallback = async (args: CallbackArgs) => {
                   amount: {
                     value: subscription?.price,
                     currency: "RUB",
-                    vat_code: "1",
                   },
+                  vat_code: "1",
                 },
               ],
             },
           }),
 
           need_email: true,
-          need_phone_number: true,
+          //@ts-ignore
+          send_email_to_provider: true,
         });
       } catch (error) {
         console.error("Error sending invoice:", error);
