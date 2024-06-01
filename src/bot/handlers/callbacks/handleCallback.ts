@@ -68,7 +68,23 @@ export const handleCallback = async (args: CallbackArgs) => {
         prices: [{ label: "Оплата", amount: price! }],
       };
       try {
-        await bot.sendInvoice(ctx.message.chat.id, invoice.title, invoice.description, invoice.payload, invoice.provider_token!, invoice.currency, invoice.prices);
+        await bot.sendInvoice(ctx.message.chat.id, invoice.title, invoice.description, invoice.payload, invoice.provider_token!, invoice.currency, invoice.prices, {
+          provider_data: JSON.stringify({
+            receipt: {
+              items: {
+                description: subscription?.name,
+                quantity: 1,
+              },
+              amount: {
+                value: subscription?.price,
+                currency: "RUB",
+                vat_code: "1",
+              },
+            },
+          }),
+          need_email: true,
+          need_phone_number: true,
+        });
       } catch (error) {
         console.error("Error sending invoice:", error);
       }
