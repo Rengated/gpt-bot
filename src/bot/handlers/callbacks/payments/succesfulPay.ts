@@ -33,6 +33,28 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
     },
   });
 
+  const subscribtionsLimits = await prisma.subscriptionLimits.findMany();
+
+  for (const limit of subscribtionsLimits) {
+    await prisma.userLimits.updateMany({
+      data: {
+        limit: limit.count,
+      },
+      where: {
+        model_id: limit.model_id,
+      },
+    });
+  }
+
+  await prisma.userLimits.updateMany({
+    data: {
+      requests: 0,
+    },
+    where: {
+      chat_id: transaction?.chat_id!,
+    },
+  });
+
   await prisma.transactions.updateMany({
     where: {
       id: transationId!,
@@ -42,11 +64,13 @@ export const succesfulPay = async (msg: TelegramBot.Message, bot: TelegramBot) =
       duration: subscription?.duration,
     },
   });
+
   try {
     await bot.deleteMessage(msg.chat.id, msg.message_id - 1);
   } catch (error) {
     console.log("error", error);
   }
+
   console.log("Платёж успешно завершён:", msg);
   await bot.sendMessage(msg.chat.id, `Спасибо за платеж! \nВы купили ${subscription?.name} подписку`);
 };

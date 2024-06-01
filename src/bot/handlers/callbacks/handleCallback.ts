@@ -84,7 +84,6 @@ export const handleCallback = async (args: CallbackArgs) => {
               ],
             },
           }),
-
           need_email: true,
           //@ts-ignore
           send_email_to_provider: true,
