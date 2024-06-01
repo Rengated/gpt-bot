@@ -62,13 +62,13 @@ export const handleCallback = async (args: CallbackArgs) => {
       const invoice = {
         title: `Покупка подписки ${subscription?.name}`,
         description: `Стоимость подписки: ${(price! / 100).toFixed(2)} RUB`,
-        stripeToken: process.env.STRIPE_TOKEN,
+        provider_token: process.env.STRIPE_TOKEN,
         payload: String(transaction.id),
         currency: "RUB",
         prices: [{ label: "Оплата", amount: price! }],
       };
       try {
-        await bot.sendInvoice(ctx.message.chat.id, invoice.title, invoice.description, invoice.payload, invoice.stripeToken!, invoice.currency, invoice.prices);
+        await bot.sendInvoice(ctx.message.chat.id, invoice.title, invoice.description, invoice.payload, invoice.provider_token!, invoice.currency, invoice.prices);
       } catch (error) {
         console.error("Error sending invoice:", error);
       }
