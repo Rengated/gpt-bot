@@ -53,12 +53,12 @@ export const handleProfile = async (args: HandlerArgs) => {
   const limitsText = userLimits.map((item: UserLimits) => `🟢${item.Models?.name}: ${item.requests}/${item.limit}`).join("\n");
   const messageText =
     `Ваша подписка: ${userSubscription?.Subscriptions?.name}` +
-    `\nДата окончания подписки: ${userSubscription?.dateEnd!.toLocaleDateString()}` +
+    `\nДата окончания подписки: ${userSubscription?.dateEnd!.toLocaleDateString("ru-Ru")}` +
     `\nКоличество ваших рефералов: ${referals}` +
     `\nЦена подписки: ${userSubscription?.Subscriptions?.price}р` +
     `\nТекущая модель ${currentModel?.name}` +
     `\nОсталось :\n${limitsText}` +
-    `\nОбновление лимитов : ${tommorowDate.toLocaleDateString()}`;
+    `\nОбновление лимитов : ${tommorowDate.toLocaleDateString("ru-Ru")}`;
 
   await bot.sendMessage(message.chat.id, messageText);
 };
