@@ -71,10 +71,12 @@ export const handleCallback = async (args: CallbackArgs) => {
         await bot.sendInvoice(ctx.message.chat.id, invoice.title, invoice.description, invoice.payload, invoice.provider_token!, invoice.currency, invoice.prices, {
           provider_data: JSON.stringify({
             receipt: {
-              items: {
-                description: subscription?.name,
-                quantity: 1,
-              },
+              items: [
+                {
+                  description: subscription?.name,
+                  quantity: 1,
+                },
+              ],
               amount: {
                 value: subscription?.price,
                 currency: "RUB",
