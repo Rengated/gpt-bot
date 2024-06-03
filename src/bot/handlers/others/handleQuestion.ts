@@ -5,7 +5,7 @@ import { reqeustAvailable } from "./helpers/reqeustAvailable.js";
 import { successCalback } from "./helpers/successCallback.js";
 import { getImage } from "../../../api/answer/getImage.js";
 import prisma from "../../../prisma/index.js";
-import { splitMessageText } from "./splitMessageText.js";
+import { splitMessageText } from "./helpers/splitMessageText.js";
 
 export const handleQuestion = async (args: HandlerArgs) => {
   const { bot, user, message } = args;
