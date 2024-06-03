@@ -5,6 +5,7 @@ import { reqeustAvailable } from "./helpers/reqeustAvailable.js";
 import { successCalback } from "./helpers/successCallback.js";
 import { getImage } from "../../../api/answer/getImage.js";
 import prisma from "../../../prisma/index.js";
+import { splitMessageText } from "./splitMessageText.js";
 
 export const handleQuestion = async (args: HandlerArgs) => {
   const { bot, user, message } = args;
@@ -35,10 +36,15 @@ export const handleQuestion = async (args: HandlerArgs) => {
   }
 
   if (model?.family == "chat") {
-    await bot.editMessageText(response as string, { chat_id: message.chat.id, message_id: messageWait.message_id });
-    return;
+    if (response.length>=4000){
+      let partsOfText = splitMessageText(response);
+      partsOfText!.forEach(async(part)=>{await bot.sendMessage(message.chat.id, part)})
+    }
+    else{
+      await bot.editMessageText(response as string, { chat_id: message.chat.id, message_id: messageWait.message_id });
+      return;
+    }
   }
-
   await bot.deleteMessage(message.chat.id, messageWait.message_id);
-  await bot.sendPhoto(message.chat.id, response as string);
+  // await bot.sendPhoto(message.chat.id, response as string);
 };
