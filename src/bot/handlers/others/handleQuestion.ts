@@ -37,11 +37,12 @@ export const handleQuestion = async (args: HandlerArgs) => {
 
   if (model?.family == "chat") {
     if (response.length>=4000){
+      
       let partsOfText = splitMessageText(response);
-      partsOfText!.forEach(async(part)=>{await bot.sendMessage(message.chat.id, part)})
+      partsOfText!.forEach(async(part)=>{await bot.sendMessage(message.chat.id, part, {parse_mode: "Markdown"})})
     }
     else{
-      await bot.editMessageText(response as string, { chat_id: message.chat.id, message_id: messageWait.message_id });
+      await bot.editMessageText(response as string, { chat_id: message.chat.id, message_id: messageWait.message_id, parse_mode: "Markdown" });
       return;
     }
   }
