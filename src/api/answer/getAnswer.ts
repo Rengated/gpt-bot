@@ -6,8 +6,9 @@ export const getAnswer = async (question: string, model: string, user: Users, ca
   const template = await getQuestionTemplate(question, model, user);
   try {
     const response = await $api.post("chat/completions", template);
-    callback(user, question);
-    return response.data.choices[0].message.content;
+    callback(user, question); //регулируем кол-во запросов (+-)
+    let answer = response.data.choices[0].message.content
+    return answer;
   } catch (err) {
     return "";
   }

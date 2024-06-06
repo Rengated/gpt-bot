@@ -12,14 +12,14 @@ const main = async () => {
   await prisma.subscriptions.createMany({
     data: [
       { id: 1, name: "Базовая", price: 0, duration: 10000 },
-      { id: 2, name: "Расширенная", price: 500, duration: 30 },
+      { id: 2, name: "Расширенная", price: 299, duration: 30 },
     ],
   });
   await prisma.subscriptionLimits.createMany({
     data: [
-      { model_id: 1, subscription_id: 1, count: 10 },
-      { model_id: 1, subscription_id: 2, count: 50 },
-      { model_id: 2, subscription_id: 2, count: 5 },
+      { model_id: 1, subscription_id: 1, count: 20 },
+      { model_id: 1, subscription_id: 2, count: 100 },
+      { model_id: 2, subscription_id: 2, count: 25 },
     ],
   });
 
